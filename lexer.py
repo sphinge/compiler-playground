@@ -20,8 +20,7 @@ keywords = {
     "while": TokenType.WHILE
 }
 
-ezcFilePath = "/Users/nikolas/Documents/WS23:24/Compilers/projekt/ezcTest.txt"
-#ezcFilePath = sys.argv[1] #TODO: handle wrong intputs
+ezcFilePath = sys.argv[1] #TODO: handle wrong intputs
 
 class Lexer:
     def __init__(self, filePath):
