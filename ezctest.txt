@@ -1,0 +1,3 @@
+if(isEmpty(bank_account) == true){
+	bank_account = bank_account + 100000;
+}
