@@ -1,0 +1,25 @@
+program        → declaration* EOF ;
+
+########### Declarations
+
+declaration    → statement ;
+
+statement      → exprStmt;
+
+exprStmt       → expression ";" ;
+
+########### Expressions
+
+expression     → assignment ;
+
+assignment     → IDENTIFIER "=" assignment
+               | term ;
+
+term           → factor ( ( "-" | "+" ) factor )* ;
+factor         → unary ( ( "/" | "*" ) unary )* ;
+
+unary          → ( "!" | "-" ) unary | call ;
+call           → IDENTIFIER "(" arguments? ")" | primary;
+primary        → "true" | "false" | "nil" 
+               | NUMBER | STRING | IDENTIFIER 
+               | "(" expression ")" ;
