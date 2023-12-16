@@ -1,23 +1,23 @@
 .PHONY: run test setup freeze clean
 
 run:
-	@-source venv/bin/activate && \
+	@. venv/bin/activate && \
 	python3 src/main.py assets/sample.txt
 
 test:
-	@-source venv/bin/activate && \
+	@. venv/bin/activate && \
 	venv/bin/ptw
 
 setup:
 	@echo "\033[1;34m### bluecompiler ###\033[0m \t \033[34mSetting up project with Python virtual environment\033[0m"
 	@python3 -m venv venv
-	@source venv/bin/activate && \
+	@. venv/bin/activate && \
 	pip install -e . && \
 	pip install -r requirements.txt
 	@echo "\033[1;32m### bluecompiler ###\033[0m \t \033[32mSetup complete (dependencies from requirements.txt installed)\033[0m" 
 
 freeze:
-	@source venv/bin/activate && \
+	@. venv/bin/activate && \
 	pip freeze > requirements.txt
 	@echo "\033[1;32m### bluecompiler ###\033[0m \t \033[32mUpdated requirements.txt with pip freeze\033[0m" 
 
