@@ -10,7 +10,6 @@ class SymboltableStackItem:
 class SymboltableStack:
     def __init__(self):
         self.globalTable = SymboltableStackItem(None, None)
-        self.globalTable
         self.head = self.globalTable
 
     def pushNewTableOnCurrentContext(self):
