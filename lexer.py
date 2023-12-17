@@ -3,7 +3,6 @@ import sys
 
 keywords = {
     "and": TokenType.AND,
-    "class": TokenType.CLASS,
     "else": TokenType.ELSE,
     "false": TokenType.FALSE,
     "for": TokenType.FOR,
@@ -24,8 +23,10 @@ ezcFilePath = "/Users/nikolas/Documents/WS23:24/Compilers/projekt/bluecompiler/e
 #ezcFilePath = sys.argv[1] #TODO: handle wrong intputs
 
 class Lexer:
-    def __init__(self, filePath):
+    def __init__(self, filePath, pSymbolTable):
         self.filePath = filePath
+        self.pSymbolTable = {}
+
         self.tokenList = []
         self.lexemeBegin = 0
         self.forward = 0
@@ -37,7 +38,7 @@ class Lexer:
             self.currentLine = file.readline()
             if self.currentLine == "": break
             self.scanTokens()
-            self.reset()
+            self.resetScanner()
         
         self.tokenList.append([TokenType.EOF.name, None])
         file.close()
@@ -49,7 +50,7 @@ class Lexer:
         if not self.reachedEnd(): 
             self.forward = self.forward + 1
 
-    def reset(self):
+    def resetScanner(self):
         self.lexemeBegin = 0
         self.forward = 0
 
