@@ -40,13 +40,3 @@ class SymboltableStack:
 
         return chainElement.table[key] # None if id not contained in any symbol table
     
-
-st = SymboltableStack()
-st.addSymbolToCurrentContext("a", "3")
-st.addSymbolToCurrentContext("b", "4")
-st.pushNewTableOnCurrentContext()
-st.addSymbolToCurrentContext("c", "5")
-st.pushNewTableOnGolbalContext()
-st.addSymbolToCurrentContext("a", "2")
-
-print(st.get("a"))
