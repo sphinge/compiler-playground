@@ -1,0 +1,4 @@
+program → {declaration}* {EOF} ;
+
+declaration → {IDENTIFIER} = ({STRING}|{NUMBER}) {SEMICOLON};
+
