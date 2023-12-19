@@ -15,6 +15,7 @@ class TokenType(Enum):
     SEMICOLON = (9,)
     SLASH = (10,)
     STAR = (11,)
+    VERTICAL_BAR  = (39,)
 
     BANG = (12,)
     BANG_EQUAL = (13,)
