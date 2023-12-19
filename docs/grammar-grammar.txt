@@ -1,3 +1,0 @@
-productions = {IDENTIFIER} {EQUAL} {body} {SEMICOLON};
-body = {LEFT_BRACE} {IDENTIFIER} {RIGHT_BRACE};
-
