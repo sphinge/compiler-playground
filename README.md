@@ -1,23 +1,180 @@
-## Parser - Project Blue
+# Compiler Project - Team Blue
+In this project we construct an LL(1) grammar for a small programming language called **ezC**. We then build the frontend of a compiler, including a **lexical analyzer**, **synthactic analyzer** and **code generator**, which has the capability of translating ezC into an intermediate representation(tbd.).
+The parsers will be a **top-down, nonrecursive predictive Parser**.
 
-### project setup
+**Python** was chones as the main programming language.
 
-- Run `make setup` to create a venv and insall all the needed dependencies.
-- Run `make test` to run our tests.
 
-### project structure
+## The ezC Language
+### 1. Specification
+ezC has basic functionality, including:\
+\
+**- Floating-Points:** `10.0`\
+**- Strings:** `"Hi, my name is"`\
+**- Boolean-Values:** `true, false`\
+**- Null-Values:** `Nil`\
+**- Typeless Variables:** `name = "John"`\
+**- Functions:** `calculateBMI(height, weight){... return bmi}`\
+**- Blocks:** `{...}`\
+**- Conditional Statements:** `if{...} else{...}` where `else` is optional\
+**- Operators:**
+- mathematical: +, -, *, /, =, <, >, <=, >=, !=
+- logical: !, ==, &&, || \
 
-![A picture describing our current scheme.](scheme.png)
+**- While-Loops:** `while(condition){...}`\
+ 
+ ### 2. Grammar
+ A valid ezC-program must follow the rules of the following **LL(1) grammar**:
 
-This project is written in python and uses pytest to test the lexer. The
-different stages of our compiler are seperated into python modules:
+>### Productions
+>starting NT: program\
+>program        → declaration program'\
+>program'       → program | _EOF_\
+>declaration    → functionDecl
+>               | statement
+>
+>### Statements
+>statement      → assignment
+>                | ifStmt
+>                | printStmt
+>                | whileStmt
+>                | returnStmt\
+>assignment     → _IDENTIFIER_ _=_ exprStmt\
+>exprStmt       → expression _;_\
+>ifStmt         → _if_ _(_ expression _)_ block ifStmt\
+>ifStmt'        →  _else_ block | _epsilon_\
+>printStmt      → _print_ expression _;_\
+>whileStmt      → _while_ _(_ expression _)_ _{_ statement _}_\
+>returnStmt     → _return_ expression _;_\
+>block          → _{_ statement _}_
+>
+>### Functions
+>functionDecl   → _function_ _ID_ _(_ parameters _)_ block\
+>parameters     →  _epsilon_ | _IDENTIFIER_ parameters'\
+>parameters'    → _epsilon_| , _IDENTIFIER_ parameters'\
+>arguments      → expression arguments'\
+>arguments'     → , arguments' | epsilon\
+>
+>### Expressions
+>expression → e_level1 expression'\
+>expression' → || expression | _epsilon_\
+>e_level1    → e_level2 e_level1'\
+>e_level1'   → && e_level1 | _epsilon_\
+>e_level2    → e_level3 e_level2'\
+>e_level2'   →  _==_ e_level2 | _epsilon_\
+>e_level3    → e_level4 e_level3'\
+>e_level3'   → comp_operators e_level4 | _epsilon_\
+>e_level4    → e_level5 e_level4'\
+>e_level4'   → _+_ e_level4 | _-_ e_level4 | _epsilon_\
+>e_level5    → e_level6 e_level5'\
+>e_level5'   → _/_ e_level5 | _*_ e_level5 | _epsilon_\
+>e_level6    → _!_ e_level6' | - e_level6' | e_level6'  // introduces ambigouity \
+>e_level6'   → primary | funcCall_or_variable\
+>primary     → _true_ | _false_ | _NIL_ | _NUMBER_ | _STRING_ | _(_ expression _)_\
+>funcCall_or_variable → _IDENTIFIER_ (funcCall')\
+>funcCall'   → (arguments) | _epsilon_\
+>comp_operators → <= | < | > | >= | !=  // is determined by lexer, < and <= are atomic tokens
 
-The lexer in `lexer` uses an input to generate a token stream. The tokens are
-defined in `TokenTypes.py`.
+## Lexical Analysis
 
-### UML diagram
+### 1. Token-Types:
+The following is a complete list of token-types our lexical analyzer recognizes. 
+- EOF
+- LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, COMMA, DOT
+- MINUS, PLUS, SEMICOLON, SLASH, STAR, VERTICAL_BAR
+- BANG, BANG_EQUAL, EQUAL, EQUAL_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, RIGHT_ARROW
+- IDENTIFIER, STRING, NUMBER
+- AND, ELSE, FALSE, FUNC, IF, NIL, OR, PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE
 
-Our UML diagram can be opened and edited using
-[drawio](https://app.diagrams.net/).
 
-### [Language Spec](docs/language-spec)
+### 2. Implementation
+Our lexical analyzer consists of a single class called `Lexer`. As one would expected of a lexical analyser, a lexer-object must be provided with a *filepath* and a *pointer to a symboltable*, upon initialization. When `generateTokens()` is called, the lexer will start going through the given file one character after another using **one lookahead** (LL(**1**)) and use some simple helper-functions to produce the correct tokens. Note, that longer tokens are always chosen over shorter tokens(e.g. `<=` over `<`).\
+The following code shows the overall matching process, where `self.peek` returns the character the lexer is currently scanning.
+
+```python
+def scanTokens(self):
+        while not self.reachedEnd():
+            match self.peek():
+                case '(': self.consumeToken(TokenType.LEFT_PAREN)
+                case ')': self.consumeToken(TokenType.RIGHT_PAREN)
+                case '{': self.consumeToken(TokenType.LEFT_BRACE)
+                case '}': self.consumeToken(TokenType.RIGHT_BRACE)
+                case ',': self.consumeToken(TokenType.COMMA)
+                case '.': self.consumeToken(TokenType.DOT)
+                case '-': self.consumeToken(TokenType.MINUS)
+                case '+': self.consumeToken(TokenType.PLUS)
+                case ';': self.consumeToken(TokenType.SEMICOLON)
+                case '*': self.consumeToken(TokenType.STAR)
+                case '!': self.consumeToken(TokenType.BANG_EQUAL) if self.isFollowedBy('=') else self.consumeToken(TokenType.BANG)
+                case '=': self.consumeToken(TokenType.EQUAL_EQUAL) if self.isFollowedBy('=') else self.consumeToken(TokenType.EQUAL)
+                case '<': self.consumeToken(TokenType.LESS_EQUAL) if self.isFollowedBy('=') else self.consumeToken(TokenType.LESS)
+                case '>': self.consumeToken(TokenType.GREATER_EQUAL) if self.isFollowedBy('=') else self.consumeToken(TokenType.GREATER)
+                case '/': self.consumeToken(TokenType.SLASH) if self.lookahead() != '/' else self.skipComment()
+                case " ": self.moveToNextLexeme()
+                case '\r': self.moveToNextLexeme()
+                case '\t': self.moveToNextLexeme()
+                case '\n': self.moveToNextLexeme()
+                case '"': self.handleString()
+                case __: 
+                    if self.isDigit(self.peek()): 
+                        self.handleNumber()
+                    elif self.isAlpha(self.peek()):
+                        self.handleIdentifier()
+                    else:
+                        print(self.currentLine, "unexpected character.")
+                        self.moveToNextLexeme()
+```
+
+### Example
+As an Example, when the following text is provided:\
+>2;\
+"Hello World"\
+32345.123\
+(){};\
+var i <=23;\
+var j =(i +1) * 2; // alksdjhfkj<<<=>//()\
+
+the following list of tokens will be generated by the lexer:
+```python
+[
+    [TokenType.SEMICOLON.name, None],
+    [TokenType.NUMBER.name, 2.0],
+    [TokenType.SEMICOLON.name, None],
+    [TokenType.STRING.name, "Hello World"],
+    [TokenType.NUMBER.name, 32345.123],
+    [TokenType.LEFT_PAREN.name, None],
+    [TokenType.RIGHT_PAREN.name, None],
+    [TokenType.LEFT_BRACE.name, None],
+    [TokenType.RIGHT_BRACE.name, None],
+    [TokenType.SEMICOLON.name, None],
+    [TokenType.VAR.name, None],
+    [TokenType.IDENTIFIER.name, "i"],
+    [TokenType.LESS_EQUAL.name, None],
+    [TokenType.NUMBER.name, 23.0],
+    [TokenType.SEMICOLON.name, None],
+    [TokenType.VAR.name, None],
+    [TokenType.IDENTIFIER.name, "j"],
+    [TokenType.EQUAL.name, None],
+    [TokenType.LEFT_PAREN.name, None],
+    [TokenType.IDENTIFIER.name, "i"],
+    [TokenType.PLUS.name, None],
+    [TokenType.NUMBER.name, 1.0],
+    [TokenType.RIGHT_PAREN.name, None],
+    [TokenType.STAR.name, None],
+    [TokenType.NUMBER.name, 2.0],
+    [TokenType.SEMICOLON.name, None],
+    [TokenType.EOF.name, None],
+]
+```
+
+## Symboltable Stack
+Todo
+
+## Parsing Table
+Todo
+
+## Parser
+Todo
+
+## Contributions
+Todo
