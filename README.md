@@ -1,5 +1,7 @@
-goto https://app.diagrams.net/
+## Parser - Project Blue
 
-an upload uml.drawio to it
+### UML diagram
 
-than you can edit the diagramm
+Our UML diagram can be opened and edited using
+[drawio](https://app.diagrams.net/).
+
