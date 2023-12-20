@@ -1,8 +1,36 @@
 # Compiler Project - Team Blue
-In this project we construct an LL(1) grammar for a small programming language called **ezC**. We then build the frontend of a compiler, including a **lexical analyzer**, **synthactic analyzer** and **code generator**, which has the capability of translating ezC into an intermediate representation(tbd.).
+# Project goals
+This project is about developing a compiler that has the LL(1) grammar and can be applied to the **ezC** language.
+First, we build the front end of a compiler that contains a **lexical analyser**, a **syntactic analyser** and a **code generator** that is able to translate ezC into an intermediate representation (tbd). 
+
 The parsers will be a **top-down, nonrecursive predictive Parser**.
 
-**Python** was chones as the main programming language.
+The main programming language is **Python**.
+
+Project goals:
+    1. basics and principles of lexical analysis (scanning):
+- Description of the language to be lexemised 
+- Implementation of character classification and lexical token definition.
+
+    2. basics and principles of syntax analysis (parsing):
+- Description of the structure of the language (context-free grammar)
+ - Implementation of syntax rules and syntax analysis strategies
+
+    3. architecture and modularity of lexer and parser:
+- Separation of lexical and syntactic analysis 
+- Merging the lexical and syntactic token streams 
+- Use of token buffers and lookahead functions to process conflicts and unusual structures 
+
+    4. examples and test scenarios:
+- Examples of valid and invalid input strings 
+- Description of test cases and expected values for the parser 
+
+    5. extension points and customisation options:
+- Possibility to extend lexical and syntactic grammar 
+- Possibility to customise lexical and syntactic rules for different programming languages
+
+
+
 
 
 ## The ezC Language
