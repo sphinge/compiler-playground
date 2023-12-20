@@ -236,13 +236,13 @@ The parsing-table is stored in a two-dimensional hashtable.
 The parsers works with an input-string, a stack, and the generated parsing-table, as shown in the lecture.
 
 ## Contributions
-Teamlead: Alexander G
-
-
-Alexander R, 
-Felix, 
-Friederike, 
-Nikolas, 
-Peter, 
-Wiktoria, 
-GameOfWorld, 
+- **Project Management:**
+- **Project Setup and Structuring:**
+- **Project Documentation:**
+Nikolas
+- **Construction of ezC-Language:**
+- **Construction of LL(1) ezC-Grammar:**
+- **Implementation of Lexical Analyzer:**
+Nikolas
+- **Implementation of Parser:**
+Nikolas
