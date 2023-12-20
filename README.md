@@ -205,4 +205,11 @@ Todo
 Todo
 
 ## Contributions
-Todo
+Teamlead: Alexander G
+Alexander R
+Felix
+Friederike
+Nikolas
+Peter
+Wiktoria
+GameOfWorld
