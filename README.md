@@ -242,7 +242,8 @@ The parsers works with an input-string, a stack, and the generated parsing-table
 Nikolas
 - **Construction of ezC-Language:**
 - **Construction of LL(1) ezC-Grammar:**
+Peter
 - **Implementation of Lexical Analyzer:**
 Nikolas
 - **Implementation of Parser:**
-Nikolas
+Nikolas, Peter
