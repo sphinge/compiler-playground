@@ -205,13 +205,13 @@ Todo
 Todo
 
 ## Contributions
-Teamlead: Alexander G\\
+Teamlead: Alexander G
 
 
-Alexander R
-Felix
-Friederike
-Nikolas
-Peter
-Wiktoria
-GameOfWorld
+Alexander R, 
+Felix, 
+Friederike, 
+Nikolas, 
+Peter, 
+Wiktoria, 
+GameOfWorld, 
