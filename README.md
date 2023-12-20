@@ -205,7 +205,9 @@ Todo
 Todo
 
 ## Contributions
-Teamlead: Alexander G
+Teamlead: Alexander G\\
+
+
 Alexander R
 Felix
 Friederike
