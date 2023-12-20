@@ -8,26 +8,26 @@ The parsers will be a **top-down, nonrecursive predictive Parser**.
 The main programming language is **Python**.
 
 Project goals:
-    1. basics and principles of lexical analysis (scanning):
-- Description of the language to be lexemised 
-- Implementation of character classification and lexical token definition.
+1. basics and principles of lexical analysis (scanning):
+    - Description of the language to be lexemised 
+    - Implementation of character classification and lexical token definition.
 
-    2. basics and principles of syntax analysis (parsing):
-- Description of the structure of the language (context-free grammar)
- - Implementation of syntax rules and syntax analysis strategies
+2. basics and principles of syntax analysis (parsing):
+    - Description of the structure of the language (context-free grammar)
+    - Implementation of syntax rules and syntax analysis strategies
 
-    3. architecture and modularity of lexer and parser:
-- Separation of lexical and syntactic analysis 
-- Merging the lexical and syntactic token streams 
-- Use of token buffers and lookahead functions to process conflicts and unusual structures 
+3. architecture and modularity of lexer and parser:
+    - Separation of lexical and syntactic analysis 
+    - Merging the lexical and syntactic token streams 
+    - Use of token buffers and lookahead functions to process conflicts and unusual structures 
 
-    4. examples and test scenarios:
-- Examples of valid and invalid input strings 
-- Description of test cases and expected values for the parser 
+4. examples and test scenarios:
+    - Examples of valid and invalid input strings 
+    - Description of test cases and expected values for the parser 
 
-    5. extension points and customisation options:
-- Possibility to extend lexical and syntactic grammar 
-- Possibility to customise lexical and syntactic rules for different programming languages
+5. extension points and customisation options:
+    - Possibility to extend lexical and syntactic grammar 
+    - Possibility to customise lexical and syntactic rules for different programming languages
 
 
 
