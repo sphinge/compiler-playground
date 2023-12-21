@@ -237,6 +237,7 @@ The parsers works with an input-string, a stack, and the generated parsing-table
 
 ## Contributions
 - **Project Management:**
+Alexander
 - **Project Setup and Structuring:**
 Felix
 - **Project Documentation:**
