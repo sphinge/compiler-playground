@@ -241,7 +241,7 @@ Alexander
 - **Project Setup and Structuring:**
 Felix
 - **Project Documentation:**
-Nikolas
+Nikolas, Friederike
 - **Construction of ezC-Language:**
 - **Construction of LL(1) ezC-Grammar:**
 Peter
@@ -250,4 +250,4 @@ Nikolas, Felix (refactoring)
 - **Implementation of Parser:**
 Nikolas, Peter
 - **Writing tests:**
-Felix
+Felix, Friederike
