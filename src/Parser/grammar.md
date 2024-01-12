@@ -15,13 +15,15 @@ declaration    → functionDecl
 
 ### Statements
 
+type           → __int__ | __string__ | __float__ | __bool__
+
 statement      → assignment
                 | ifStmt
                 | printStmt
                 | whileStmt
                 | returnStmt
 
-assignment     → _IDENTIFIER_ _=_ exprStmt // causes ambigouity
+assignment     → type _IDENTIFIER_ _=_ exprStmt // causes ambigouity
 
 exprStmt       → expression _;_
 
@@ -40,7 +42,7 @@ block          → _{_ statement _}_
 
 ### Functions
 
-functionDecl   → _function_ _ID_ _(_ parameters _)_ block
+functionDecl   → _function_ tyoe _ID_ _(_ parameters _)_ block
 
 parameters     →  _epsilon_ | _IDENTIFIER_ parameters'
 
