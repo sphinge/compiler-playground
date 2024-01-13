@@ -29,7 +29,7 @@ class TokenType(Enum):
     IDENTIFIER    = 22,
     STRING        = 23,
     FLOAT         = 24,
-    INT           = 40,
+    INT           = 100,
 
     AND           = 25,
     ELSE          = 26,
