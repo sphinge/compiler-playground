@@ -143,7 +143,9 @@ class Matcher():
                 return "identifier"
             case TokenType.STRING:
                 return "string"
-            case TokenType.NUMBER:
+            case TokenType.INT:
+                return "number"        
+            case TokenType.FLOAT:
                 return "number"
             case TokenType.AND:
                 return "&&"

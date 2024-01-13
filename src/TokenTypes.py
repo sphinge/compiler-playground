@@ -28,7 +28,8 @@ class TokenType(Enum):
 
     IDENTIFIER    = 22,
     STRING        = 23,
-    NUMBER        = 24,
+    FLOAT         = 24,
+    INT           = 40,
 
     AND           = 25,
     ELSE          = 26,
@@ -45,3 +46,8 @@ class TokenType(Enum):
     TRUE          = 37,
     VAR           = 38,
     WHILE         = 39
+
+    TYPE_INT      =40,
+    TYPE_FLOAT    =41,
+    TYPE_STR      =42,
+    TYPE_BOOL     =43
