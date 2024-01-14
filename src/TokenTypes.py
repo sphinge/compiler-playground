@@ -51,3 +51,6 @@ class TokenType(Enum):
     TYPE_FLOAT    =41,
     TYPE_STR      =42,
     TYPE_BOOL     =43
+
+    RIGHT_BRACK   = 45,
+    LEFT_BRACK    = 46

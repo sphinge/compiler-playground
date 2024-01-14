@@ -13,6 +13,10 @@ class Matcher():
                 return None
             case "EOF":
                 return TokenType.EOF
+            case "[":
+                return TokenType.LEFT_BRACK
+            case "]":
+                return TokenType.RIGHT_BRACK
             case "(":
                 return TokenType.LEFT_PAREN
             case ")":
@@ -109,6 +113,10 @@ class Matcher():
         match token_type:
             case TokenType.EOF:
                 return "EOF"
+            case TokenType.LEFT_BRACK:
+                return "["
+            case TokenType.RIGHT_BRACK:
+                return "]"
             case TokenType.LEFT_PAREN:
                 return "("
             case TokenType.RIGHT_PAREN:

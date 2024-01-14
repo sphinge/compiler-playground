@@ -39,10 +39,14 @@ SDDHash = {
     "STATEMENT": (inherit_next_1_child, synth_code_1_child),
   },
   "TYPE": {
-    "type_int": "$$$$",
-    "type_float": "$$$$",
-    "type_str": "$$$$",
-    "type_bool": "$$$$"
+    "type_int": (get_and_inherit_base_type , synth_expected_type_and_width),
+    "type_float": (get_and_inherit_base_type , synth_expected_type_and_width),
+    "type_str": (get_and_inherit_base_type , synth_expected_type_and_width),
+    "type_bool": (get_and_inherit_base_type , synth_expected_type_and_width),
+  },
+  "ARRAY":{
+    "[": (inherit_base_type,synth_array),
+    "epsilon": (stop_base_type_inheritance, None)
   },
   "STATEMENT": {
     "ASSIGNMENT": (inherit_next_2_children, synth_code_2_children),
@@ -56,7 +60,7 @@ SDDHash = {
     "epsilon": "$$$$"
   },
   "ASSIGNMENT": {
-    "TYPE": "$$$$"
+    "TYPE": (None, None)
   },
   "EXPRSTMT": {
     "EXPRESSION": "$$$$"

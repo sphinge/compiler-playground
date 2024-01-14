@@ -147,6 +147,8 @@ class Lexer:
     def scanTokens(self):
         while not self.reachedEnd():
             match self.peek():
+                case '[': self.consumeToken(TokenType.LEFT_BRACK)
+                case ']': self.consumeToken(TokenType.RIGHT_BRACK)
                 case '(': self.consumeToken(TokenType.LEFT_PAREN)
                 case ')': self.consumeToken(TokenType.RIGHT_PAREN)
                 case '{': self.consumeToken(TokenType.LEFT_BRACE)
