@@ -132,13 +132,7 @@ class ParsingTable:
                     self.FOLLOW[nonTerminal] = self.FOLLOW[nonTerminal].union(self.FOLLOW[nonTerminalToCheck])
 
     def isNonTerminalSymbol(self, symbol):
-        cond1 = symbol.isupper()
-        cond2 = 'X' in symbol
-        cond3 = self.has_numbers(symbol)
-        return cond1 or cond2 or cond3
-
-    def has_numbers(self, inputString):
-        return any(char.isdigit() for char in inputString)
+        return symbol in self.nonTerminals
 
     def followHasChanged(self, comp):
         if comp == None:

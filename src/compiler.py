@@ -14,12 +14,11 @@ class Compiler:
             ezcFilePath="src/ezctest.txt"
         lexer = Lexer(ezcFilePath)
         lexer.generateTokens()
-        print(lexer.tokenList)
+        print("\n\n LEXER OUTPUT: \n\n "+str(lexer.tokenList)+"\n\n")
         
         pTable=ParsingTable(grammarHash)
         pTable.constructParseTable()
         pTable.printTable()
-        print(pTable.parseTable["PROGRAM"])
         parser= MyParser(lexer.tokenList, pTable)
         parser.parse()
 
