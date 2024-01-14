@@ -40,6 +40,7 @@ class MyParser:
             else:
                 id= self.tree.addNode(Matcher.token_type_to_string(i), token[1])
                 stack_acc.append((i, id))
+        self.tree.add_SDD_handler(token, production)
         self.stack= stack_acc+self.stack
         
 

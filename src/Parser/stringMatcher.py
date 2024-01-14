@@ -59,8 +59,10 @@ class Matcher():
                 return TokenType.IDENTIFIER
             case "STRING":
                 return TokenType.STRING
-            case "NUMBER":
-                return TokenType.NUMBER
+            case "INT":
+                return TokenType.INT
+            case "FLOAT":
+                return TokenType.FLOAT
             case "AND":
                 return TokenType.AND
             case "ELSE":
@@ -91,6 +93,14 @@ class Matcher():
                 return TokenType.VAR
             case "WHILE":
                 return TokenType.WHILE
+            case "TYPE_INT":
+                return TokenType.TYPE_INT
+            case "TYPE_FLOAT":
+                return TokenType.TYPE_FLOAT
+            case "TYPE_STR":
+                return TokenType.TYPE_STR
+            case "TYPE_BOOL":
+                return TokenType.TYPE_BOOL
             case _:
                 return None  
             
@@ -144,9 +154,9 @@ class Matcher():
             case TokenType.STRING:
                 return "string"
             case TokenType.INT:
-                return "number"        
+                return "int"        
             case TokenType.FLOAT:
-                return "number"
+                return "float"
             case TokenType.AND:
                 return "&&"
             case TokenType.ELSE:
@@ -177,5 +187,13 @@ class Matcher():
                 return "var"
             case TokenType.WHILE:
                 return "while"
+            case TokenType.TYPE_INT:
+                return "type_int"
+            case TokenType.TYPE_FLOAT:
+                return "type_float"
+            case TokenType.TYPE_STR:
+                return "type_str"
+            case TokenType.TYPE_BOOL:
+                return "type_bool"
             case _:
                 return None  #
