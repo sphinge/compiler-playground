@@ -44,10 +44,6 @@ SDDHash = {
     "type_str": (get_and_inherit_base_type , synth_expected_type_and_width),
     "type_bool": (get_and_inherit_base_type , synth_expected_type_and_width),
   },
-  "ARRAY":{
-    "[": (inherit_base_type,synth_array),
-    "epsilon": (stop_base_type_inheritance, None)
-  },
   "STATEMENT": {
     "ASSIGNMENT": (inherit_next_2_children, synth_code_2_children),
     "IFSTMT": (inherit_next_2_children, synth_code_2_children),
