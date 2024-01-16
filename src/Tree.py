@@ -1,7 +1,6 @@
 from TokenTypes import TokenType
 from Semantic.SDDHash import SDDHash
 import pydot
-from Parser.stringMatcher import Matcher
 class Tree_Wrapper():
     def __init__(self):
         self.root=None
@@ -44,7 +43,7 @@ class Tree_Wrapper():
         self.root.remove_NTs()
 
     def add_SDD_handler(self, token: tuple[str, int], production: list):
-        first_element_of_production= production[0] if type(production[0])==str else Matcher.token_type_to_string(production[0])
+        first_element_of_production= production[0] if type(production[0])==str else TokenType.token_type_to_string(production[0])
         function = SDDHash[token[0]][first_element_of_production]
         node= self.find(tuple[1])
         if node:
