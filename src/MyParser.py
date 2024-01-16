@@ -43,17 +43,16 @@ class MyParser:
         
 
     def parse(self):
-        while self.input[0][0]!=TokenType.EOF or self.stack[0][0]!="PROGRAMX":
+        while self.input!=[]:
             self.parse_step()
-        if self.stack[0][0]=="PROGRAMX" and len(self.stack)==1:
+        if self.stack==[]:
             print("DONE!")
             print(self.stack)
-            self.tree.addNode("epsilon", self.stack[0][1])
             self.tree.print()
-            self.tree.generate_AST()
         else: 
             print(self.stack)
             print("Parsing Failed")
+        return self.tree
 
 
 if __name__=="__main__":
