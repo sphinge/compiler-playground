@@ -103,7 +103,7 @@ class MyNode():
     def run_SDDs(self):
         # if functions are not yet implemented
         if self.SDD=="$$$$":
-            self.code= f"\n // ------------------- \n // Code for {self.label} \n // ----------------- \n"
+            self.code= f"\n // --------------------- \n // Code for {self.label} \n // --------------------- \n"
             self.type= f"{self.label}.type"
             return
         if TokenType.string_to_token_type(self.label.upper())==None and not self.label=="epsilon": # if self.label is NonTerminal

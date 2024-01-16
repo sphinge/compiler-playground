@@ -93,7 +93,7 @@ def ASSIGNMENT_synth(Node):
     
 def EXPRSTMT_synth(Node):
     Node.type= Node.children[0].type
-    Node.code= Node.children[0].code + "; \n"
+    Node.code= Node.children[0].code
 
 def IFSTMT_inherit(Node):
     T,F = Label("Cond_True"),Label("Cond_False")
