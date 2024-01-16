@@ -2,6 +2,10 @@ from TokenTypes import TokenType
 import sys
 
 keywords = {
+    "int": TokenType.TYPE_INT,
+    "float": TokenType.TYPE_FLOAT,
+    "string": TokenType.TYPE_STR,
+    "bool": TokenType.TYPE_BOOL,
     "and": TokenType.AND,
     "else": TokenType.ELSE,
     "false": TokenType.FALSE,
@@ -125,8 +129,9 @@ class Lexer:
             else:
                 print("decimalpoint must be followed by digit")
                 return
-        self.consumeToken(TokenType.NUMBER, float(self.currentLine[self.lexemeBegin:self.forward+1]))
-
+            self.consumeToken(TokenType.FLOAT, float(self.currentLine[self.lexemeBegin:self.forward+1]))
+        else:
+            self.consumeToken(TokenType.INT, int(self.currentLine[self.lexemeBegin:self.forward+1]))
     def handleIdentifier(self):
         while self.isAlphaNumeric(self.lookahead()): 
             self.advance()
@@ -142,6 +147,8 @@ class Lexer:
     def scanTokens(self):
         while not self.reachedEnd():
             match self.peek():
+                case '[': self.consumeToken(TokenType.LEFT_BRACK)
+                case ']': self.consumeToken(TokenType.RIGHT_BRACK)
                 case '(': self.consumeToken(TokenType.LEFT_PAREN)
                 case ')': self.consumeToken(TokenType.RIGHT_PAREN)
                 case '{': self.consumeToken(TokenType.LEFT_BRACE)

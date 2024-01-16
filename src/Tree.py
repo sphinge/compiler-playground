@@ -1,7 +1,6 @@
 from TokenTypes import TokenType
-
+from Semantic.SDDHash import SDDHash
 import pydot
-
 class Tree_Wrapper():
     def __init__(self):
         self.root=None
@@ -42,13 +41,22 @@ class Tree_Wrapper():
         
     def generate_AST(self):
         self.root.remove_NTs()
-        
+
+    def add_SDD_handler(self, token: tuple[str, int], production: list):
+        first_element_of_production= production[0] if type(production[0])==str else TokenType.token_type_to_string(production[0])
+        function = SDDHash[token[0]][first_element_of_production]
+        node= self.find(tuple[1])
+        if node:
+            node.SDD= function
+
+
 
 class MyNode():
     def __init__(self, ID, label):
         self.ID=ID
         self.children=[]
         self.label=label
+        self.SDD=None
 
     def add_child(self, new):
         self.children= [new]+self.children
@@ -69,7 +77,15 @@ class MyNode():
             pass#print(self.label)
         for i in self.children:
             i.remove_NTs()
-            
+
+
+
+class SDD_Handlers():
+    @staticmethod
+    def get(NonTerminal: str, Production:list):
+        return SDDHash()
+
+
 if __name__=="__main__":
     a= Tree_Wrapper()
     a.addNode("test1")
