@@ -32,6 +32,8 @@ class Tree_Wrapper():
             self.addNode(name, self.size)
 
     def find(self, ID):
+        if type(ID)!=str:
+            ID=str(ID)
         return self.root.search(ID)
 
     def print(self):
@@ -45,19 +47,34 @@ class Tree_Wrapper():
     def add_SDD_handler(self, token: tuple[str, int], production: list):
         first_element_of_production= production[0] if type(production[0])==str else TokenType.token_type_to_string(production[0])
         function = SDDHash[token[0]][first_element_of_production]
-        node= self.find(tuple[1])
+        node= self.find(token[1])
         if node:
             node.SDD= function
 
+    def execute_IRGeneration(self)->str:
+        self.root.run_SDDs()
+        return self.root.code
 
 
 class MyNode():
     def __init__(self, ID, label):
+        # Basic Tree Logic
         self.ID=ID
         self.children=[]
         self.label=label
+        
+        # SDD logic
         self.SDD=None
 
+        # SDD TypChecking
+        self.type=None
+        # SDD IR Generation
+        self.code=None
+        self.managed_labels={}
+        self.next=None
+        self.true=None
+        self.false=None
+        
     def add_child(self, new):
         self.children= [new]+self.children
 
@@ -78,7 +95,20 @@ class MyNode():
         for i in self.children:
             i.remove_NTs()
 
+    def run_SDDs(self):
+        # if functions are not yet implemented
+        if self.SDD=="$$$$":
+            self.code= f"\n ------------------- \n Code for {self.label} \n -----------------\n"
+            self.type= f"{self.label}.type"
+            return
 
+        if self.SDD[0]:
+            self.SDD[0](self)
+        for child in self.children:
+            child.run_SDDs()
+        if self.SDD[1]:
+            self.SDD[1](self)
+        
 
 class SDD_Handlers():
     @staticmethod

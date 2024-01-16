@@ -32,7 +32,7 @@ SDDHash = {
   },
   "PROGRAMX": {
     "PROGRAM": (inherit_next_1_child, synth_code_1_child),
-    "eof": "$$$$"
+    "EOF": "$$$$"
   },
   "DECLARATION": {
     "FUNCTIONDECL": (inherit_next_1_child, synth_code_1_child),

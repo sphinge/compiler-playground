@@ -1,6 +1,7 @@
-import sys
+from Parser.ParsingTable import ParsingTable
+from Parser.grammarHash import grammarHash
 
-import compiler
 
-compiler.Compiler.main()
-
+pTable=ParsingTable(grammarHash)
+pTable.constructParseTable()
+pTable.printTable()
