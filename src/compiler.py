@@ -22,7 +22,7 @@ class Compiler:
         parser= MyParser(lexer.tokenList, pTable)
         parse_tree=parser.parse()
 
-        parse_tree.execute_IRGeneration()
+        print(parse_tree.execute_IRGeneration())
 
 
 

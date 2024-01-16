@@ -56,7 +56,7 @@ SDDHash = {
     "epsilon": "$$$$"
   },
   "ASSIGNMENT": {
-    "TYPE": (None, None)
+    "TYPE": "$$$$"
   },
   "EXPRSTMT": {
     "EXPRESSION": "$$$$"

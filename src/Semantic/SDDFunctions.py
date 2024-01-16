@@ -21,7 +21,7 @@ def Label(name:str=""):
     idx = number_of_labels
     number_of_labels+=1
     l={
-            "code": name+str(idx),
+            "code": name+str(idx)+":",
             "name": name,
             "id":   idx
     }
@@ -46,8 +46,12 @@ def synth_code_1_child(Node):
     Node.code= Node.children[0].code
 
 def get_and_inherit_base_type(Node):
-    # get base type from type keyword
-    match Node.children[0]:
+    pass
+
+def synth_expected_type_and_width(Node):
+        # get base type from type keyword
+    token= TokenType.string_to_token_type(Node.children[0].label.upper())
+    match token:
         case TokenType.TYPE_INT:
             Node.base_type= "int"
             Node.base_width= 16
@@ -63,15 +67,8 @@ def get_and_inherit_base_type(Node):
             Node.base_width= 16
         case __:
             raise SyntaxError("EXPECTED TYPE SPECIFIER")
-    # make array possibly inherit this base_type
-    Node.children[1].base_type= Node.base_type
-    Node.children[1].base_width= Node.base_width
-
-def synth_expected_type_and_width(Node):
-    if Node.type=="str":
-        return
-    Node.type= Node.children[1].type
-    Node.width= Node.children[1].width
+    Node.type= token
+    Node.code= Node.children[0].label
     
 def inherit_base_type(Node):
     Node.children[3].base_type= Node.base_type

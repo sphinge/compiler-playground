@@ -37,7 +37,7 @@ class Tree_Wrapper():
         return self.root.search(ID)
 
     def print(self):
-        for i, j in reversed(self.edges):
+        for i, j in (self.edges):
             self.dot.add_edge(pydot.Edge(j,i))
         self.dot.write_png("output.png")                
         
@@ -76,7 +76,7 @@ class MyNode():
         self.false=None
         
     def add_child(self, new):
-        self.children= [new]+self.children
+        self.children.append(new)
 
     def search(self,ID):
         if self.ID==ID:
@@ -98,16 +98,16 @@ class MyNode():
     def run_SDDs(self):
         # if functions are not yet implemented
         if self.SDD=="$$$$":
-            self.code= f"\n ------------------- \n Code for {self.label} \n -----------------\n"
+            self.code= f"\n // ------------------- \n // Code for {self.label} \n // ----------------- \n"
             self.type= f"{self.label}.type"
             return
-
-        if self.SDD[0]:
-            self.SDD[0](self)
-        for child in self.children:
-            child.run_SDDs()
-        if self.SDD[1]:
-            self.SDD[1](self)
+        if TokenType.string_to_token_type(self.label.upper())==None: # if self.label is NonTerminal
+            if self.SDD[0]:
+                self.SDD[0](self)
+            for child in (self.children):
+                child.run_SDDs()
+            if self.SDD[1]:
+                self.SDD[1](self)
         
 
 class SDD_Handlers():
