@@ -1,8 +1,5 @@
 from Parser.grammarHash import grammarHash
-from Parser.stringMatcher import Matcher
-
-
-from TokenTypes import TokenType as TT
+from TokenTypes import TokenType
 
 class ParsingTable:
     def __init__(self, grammarHashTable, separatorSymbol = '|', endSymbol = 'eof', startSymbol = None, epsilon = 'epsilon'):
@@ -165,15 +162,15 @@ class ParsingTable:
                 print("    " + key + ": " + self.parseTable[nonTerminal][key])
 
 
-    def get_table_entry(self, NonTerminal:str, token:TT):
+    def get_table_entry(self, NonTerminal:str, token:TokenType):
         production=[]
-        token_string=Matcher.token_type_to_string(token)
+        token_string=TokenType.token_type_to_string(token)
         try:
             entry= self.parseTable[NonTerminal][token_string.lower()]
         except: 
             return []
         for word in entry.split(" "):
-            token= Matcher.string_to_token_type(word.upper())
+            token= TokenType.string_to_token_type(word.upper())
             if not token:  
                 # Couldnt match token type, therefore its a NonTerminal
                 production.append(word)
@@ -191,6 +188,6 @@ if __name__=="__main__":
     parseTable.constructParseTable()
     parseTable.printTable()
     
-    print(parseTable.get_table_entry("E_LEVEL3", TT.EOF))
+    print(parseTable.get_table_entry("E_LEVEL3", TokenType.EOF))
 
-    print(parseTable.get_table_entry("DECLARATION", TT.IF))
+    print(parseTable.get_table_entry("DECLARATION", TokenType.IF))
