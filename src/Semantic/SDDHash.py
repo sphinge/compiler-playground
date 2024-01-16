@@ -28,21 +28,21 @@ from Semantic.SDDFunctions import *
 
 SDDHash = {
   "PROGRAM": {
-    "DECLARATION": (inherit_next_2_children, synth_code_2_children)
+    "DECLARATION":  (inherit_next_2_children, synth_code_2_children)
   },
   "PROGRAMX": {
-    "PROGRAM": (inherit_next_1_child, synth_code_1_child),
-    "EOF": "$$$$"
+    "PROGRAM":      (inherit_next_1_child, synth_code_1_child),
+    "EOF":          (None, synth_code_epsilon)
   },
   "DECLARATION": {
     "FUNCTIONDECL": (inherit_next_1_child, synth_code_1_child),
-    "STATEMENT": (inherit_next_1_child, synth_code_1_child),
+    "STATEMENT":    (inherit_next_1_child, synth_code_1_child),
   },
   "TYPE": {
-    "type_int": (get_and_inherit_base_type , synth_expected_type_and_width),
-    "type_float": (get_and_inherit_base_type , synth_expected_type_and_width),
-    "type_str": (get_and_inherit_base_type , synth_expected_type_and_width),
-    "type_bool": (get_and_inherit_base_type , synth_expected_type_and_width),
+    "type_int":     (None, TYPE_synth_expected_type_and_width),
+    "type_float":   (None, TYPE_synth_expected_type_and_width),
+    "type_str":     (None, TYPE_synth_expected_type_and_width),
+    "type_bool":    (None, TYPE_synth_expected_type_and_width),
   },
   "STATEMENT": {
     "ASSIGNMENT": (inherit_next_2_children, synth_code_2_children),
@@ -53,20 +53,20 @@ SDDHash = {
   },
   "STATEMENTX": {
     "STATEMENT": (inherit_next_1_child, synth_code_1_child),
-    "epsilon": "$$$$"
+    "epsilon": (None, synth_code_epsilon)
   },
   "ASSIGNMENT": {
-    "TYPE": "$$$$"
+    "TYPE": (inherit_next_to_last_child, ASSIGNMENT_synth)
   },
   "EXPRSTMT": {
-    "EXPRESSION": "$$$$"
+    "EXPRESSION": (inherit_next_1_child, EXPRSTMT_synth)
   },
   "IFSTMT": {
-    "if": "$$$$"
+    "if": (IFSTMT_inherit, IFSTMT_synth)
   },
   "IFSTMTX": {
-    "else": "$$$$",
-    "epsilon": "$$$$"
+    "else": (inherit_next_to_last_child, synth_code_from_last_child),
+    "epsilon": (None, synth_code_epsilon)
   },
   "PRINTSTMT": {
     "print": "$$$$"
@@ -103,28 +103,28 @@ SDDHash = {
   },
   "EXPRESSIONX": {
     "or": "$$$$",
-    "epsilon": "$$$$"
+    "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL1": {
     "ELEVEL2": "$$$$"
   },
   "ELEVEL1X": {
     "&&": "$$$$",
-    "epsilon": "$$$$"
+    "epsilon":(None, synth_code_epsilon)
   },
   "ELEVEL2": {
-    "ELEVEL3": "$$$$"
+    "ELEVEL3": (None, synth_code_epsilon)
   },
   "ELEVEL2X": {
     "==": "$$$$",
-    "epsilon": "$$$$"
+    "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL3": {
     "ELEVEL4": "$$$$"
   },
   "ELEVEL3X": {
     "COMPOPERATORS": "$$$$",
-    "epsilon": "$$$$"
+    "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL4": {
     "ELEVEL5": "$$$$"
@@ -132,7 +132,7 @@ SDDHash = {
   "ELEVEL4X": {
     "+": "$$$$",
     "-": "$$$$",
-    "epsilon": "$$$$"
+    "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL5": {
     "ELEVEL6": "$$$$"
@@ -140,12 +140,12 @@ SDDHash = {
   "ELEVEL5X": {
     "/": "$$$$",
     "*": "$$$$",
-    "epsilon": "$$$$"
+    "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL6": {
     "!": "$$$$",
     "-": "$$$$",
-    "ELEVEL6X": "$$$$"
+    "ELEVEL6X": (None, synth_code_epsilon)
   },
   "ELEVEL6X": {
     "PRIMARY": "$$$$",

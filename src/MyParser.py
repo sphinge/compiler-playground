@@ -18,6 +18,11 @@ class MyParser:
         if type(token[0])==TokenType and token[0]==lookahead[0]:
             self.stack.pop(0)
             self.input.pop(0)
+
+             # If we have a literal value attached to the Token, append it to the respectiveNode
+            if lookahead[1]!=None: 
+                Node=self.tree.find(token[1])
+                Node.lexval= lookahead[1]
             print("matched: ")
             print(token)
             return
