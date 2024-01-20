@@ -34,8 +34,7 @@ class ParsingTable:
     def constructParseTable(self):
         for nonTerminal in self.nonTerminals:
             productions = self.grammar[nonTerminal].split(self.separatorSymbol)
-            if self.endSymbol in productions:
-                productions.remove(self.endSymbol)
+
 
             #for each production A->alpha of the grammar, do the following... (according to lecture book)
             for production in productions:
