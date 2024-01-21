@@ -10,6 +10,21 @@ class Parser:
 
         self.tree.addNode("PROGRAM")
 
+    def getParseTree(self):
+        return self.tree
+
+    def parse(self):
+        while self.input != []:
+            self.parse_step()
+
+        if self.stac == []:
+            print("DONE!")
+            print(self.stack)
+            self.tree.print()
+        else: 
+            print(self.stack)
+            print("Parsing Failed")
+
     def parse_step(self):
         lookahead = self.input[0]
         token = self.stack[0]
@@ -54,23 +69,6 @@ class Parser:
 
         self.tree.add_SDD_handler(token, production)
         self.stack= stack_acc+self.stack
-        
-
-    def parse(self):
-        while self.input != []:
-            self.parse_step()
-
-        if self.stac == []:
-            print("DONE!")
-            print(self.stack)
-            self.tree.print()
-        else: 
-            print(self.stack)
-            print("Parsing Failed")
-    
-
-    def getParseTree(self):
-        return self.tree
 
 
 if __name__=="__main__":

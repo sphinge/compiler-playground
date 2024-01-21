@@ -12,7 +12,7 @@ class Tree_Wrapper():
     def addNode(self, name:str, parentID:int|None = None, literal:str|None = None):
         if parentID == None:
             self.size += 1
-            self.root = MyNode(str(self.size), label = name)
+            self.root = Tree_Node(str(self.size), label = name)
             self.dot.add_node(pydot.Node(str(self.size), label = name, rank = "max"))
             return self.size
 
@@ -24,9 +24,10 @@ class Tree_Wrapper():
         self.size += 1
         self.edges.append((str(self.size),str(parentID)+"\n"))
         self.dot.add_node(pydot.Node(str(self.size), label = name))
-        Node = MyNode(str(self.size), label=name)
-        Node.lexval = literal
-        parent.add_child(Node)
+
+        newNode = Tree_Node(str(self.size), label=name)
+        newNode.lexval = literal
+        parent.add_child(newNode)
 
         return self.size
 
@@ -61,7 +62,7 @@ class Tree_Wrapper():
         return self.root.code
 
 
-class MyNode():
+class Tree_Node():
     def __init__(self, ID, label):
         # Basic Tree Logic
         self.ID       = ID

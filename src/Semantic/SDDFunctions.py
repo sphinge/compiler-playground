@@ -9,6 +9,7 @@ I think the functions should only take one node as input. This node is defined i
 """
 
 from src.Lexing.TokenTypes import TokenType
+from src.Parsing.Tree import Tree_Node
 
 #-------------------------
 # LABELS
@@ -31,93 +32,93 @@ def Label(name:str = ""):
 
 # LABELS
 #-------------------------------
-def inherit_next_2_children(Node):
+def inherit_next_2_children(node: Tree_Node):
     l = Label("next")
-    Node.children[0].next = l
-    Node.managed_labels["next"] = l
-    Node.children[1].next = Node.next
+    node.children[0].next = l
+    node.managed_labels["next"] = l
+    node.children[1].next = node.next
 
-def synth_code_2_children(Node):
-    Node.code = Node.children[0].code + Node.managed_labels["next"]["code"] + Node.children[1].code
+def synth_code_2_children(node: Tree_Node):
+    node.code = node.children[0].code + node.managed_labels["next"]["code"] + node.children[1].code
 
-def inherit_next_1_child(Node):
-    Node.children[0].next = Node.next
+def inherit_next_1_child(node: Tree_Node):
+    node.children[0].next = node.next
 
-def synth_code_1_child(Node):
-    Node.code = Node.children[0].code
+def synth_code_1_child(node: Tree_Node):
+    node.code = node.children[0].code
 
-def synth_code_epsilon(Node):
-    Node.code = ""
+def synth_code_epsilon(node: Tree_Node):
+    node.code = ""
 
-def TYPE_synth_expected_type_and_width(Node):
+def TYPE_synth_expected_type_and_width(node: Tree_Node):
     # get base type from type keyword
-    token= TokenType.string_to_token_type(Node.children[0].label.upper())
+    token= TokenType.string_to_token_type(node.children[0].label.upper())
 
     match token:
         case TokenType.TYPE_INT:
-            Node.type= "int"
-            Node.width= 16
+            node.type= "int"
+            node.width= 16
         case TokenType.TYPE_FLOAT:
-            Node.type= "float"
-            Node.width= 32
+            node.type= "float"
+            node.width= 32
         case TokenType.TYPE_STR:  # in case of string we do not have any possible array
-            Node.type= "str"
+            node.type= "str"
             return
         case TokenType.TYPE_BOOL:
-            Node.type= "bool"
-            Node.width= 16
+            node.type= "bool"
+            node.width= 16
         case __:
             raise SyntaxError("EXPECTED TYPE SPECIFIER")
         
-    Node.code= Node.type
+    node.code= node.type
     
-def TYPE_synth_type_from_Symbol_Table(Node):
+def TYPE_synth_type_from_Symbol_Table(node: Tree_Node):
     pass # TODO: Lookup previously declared value from symboltable
 
-def inherit_next_to_last_child(Node):
-    Node.children[len(Node.children)-1].next = Node.next
+def inherit_next_to_last_child(node: Tree_Node):
+    node.children[len(node.children)-1].next = node.next
 
-def ASSIGNMENT_synth(Node):
+def ASSIGNMENT_synth(node: Tree_Node):
     # CHECK TYPE
-    expected_type = Node.children[0].type
-    actual_type = Node.children[3].type
+    expected_type = node.children[0].type
+    actual_type = node.children[3].type
 
     if expected_type != actual_type:
         # TODO make Exception 
         print(f"TYPING ERROR: type {expected_type} does not match {actual_type}")
     else:
-        Node.type = actual_type
+        node.type = actual_type
 
     # SYNTH CODE
-    Node.code = f"{Node.children[3].code} {Node.children[0].code} {Node.children[1].lexval} = {Node.children[3].res}; "
+    node.code = f"{node.children[3].code} {node.children[0].code} {node.children[1].lexval} = {node.children[3].res}; "
     
     # TODO:SYMBOL TABLE UPDATE
-    #Node.symbol_table.add?
+    #node.symbol_table.add?
     
-def EXPRSTMT_synth(Node):
-    Node.type = Node.children[0].type
-    Node.code = Node.children[0].code
+def EXPRSTMT_synth(node: Tree_Node):
+    node.type = node.children[0].type
+    node.code = node.children[0].code
 
-def IFSTMT_inherit(Node):
+def IFSTMT_inherit(node: Tree_Node):
     T= Label("Cond_True"),
     F = Label("Cond_False")
 
-    Node.children[2].true_Label  = T
-    Node.children[2].false_Label = F
-    Node.managed_labels["True"]  = T
-    Node.managed_labels["False"] = F
+    node.children[2].true_Label  = T
+    node.children[2].false_Label = F
+    node.managed_labels["True"]  = T
+    node.managed_labels["False"] = F
     
     true_next = Label("next")
-    Node.children[4].next = true_next
-    Node.managed_labels["True_next"] = true_next
+    node.children[4].next = true_next
+    node.managed_labels["True_next"] = true_next
 
-    Node.children[5].next = Node.next
+    node.children[5].next = node.next
 
-def IFSTMT_synth(Node):
-    expression = Node.children[2]
-    statement1 = Node.children[4]
-    statement2 = Node.children[5]
-    Node.code = f"{expression.code} {Node.managed_labels['True']['code']} {statement1.code} {Node.managed_labels['False']['code']} {statement2.code}"
+def IFSTMT_synth(node: Tree_Node):
+    expression = node.children[2]
+    statement1 = node.children[4]
+    statement2 = node.children[5]
+    node.code = f"{expression.code} {node.managed_labels['True']['code']} {statement1.code} {node.managed_labels['False']['code']} {statement2.code}"
     
-def synth_code_from_last_child(Node):
-    Node.code = Node.children[len(Node.children)-1].code
+def synth_code_from_last_child(node: Tree_Node):
+    node.code = node.children[len(node.children)-1].code

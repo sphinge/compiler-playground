@@ -18,6 +18,23 @@ class ParsingTable:
         self.generateSets()
         self.printSets()
 
+    def get_table_entry(self, NonTerminal:str, token:TokenType):
+        production=[]
+        token_string=TokenType.token_type_to_string(token)
+        try:
+            entry= self.parseTable[NonTerminal][token_string.lower()]
+        except: 
+            return []
+        for word in entry.split(" "):
+            token= TokenType.string_to_token_type(word.upper())
+            if not token:  
+                # Couldnt match token type, therefore its a NonTerminal
+                production.append(word)
+            else:
+                # Could match tokentype, therefore its a terminal
+                production.append(token)
+        return production            # Could match tokentype, therefore its a terminal
+
     def initParseTable(self):
         for nonTerminal in self.nonTerminals:
             self.parseTable[nonTerminal] = {}
@@ -54,7 +71,6 @@ class ParsingTable:
                         except:
                             self.parseTable[nonTerminal][terminal] = production
                 
-
 
     def generateSets(self):
         for nonTerminal in self.nonTerminals:
@@ -156,25 +172,6 @@ class ParsingTable:
             print(nonTerminal + ":")
             for key in self.parseTable[nonTerminal].keys():
                 print("    " + key + ": " + self.parseTable[nonTerminal][key])
-
-
-    def get_table_entry(self, NonTerminal:str, token:TokenType):
-        production=[]
-        token_string=TokenType.token_type_to_string(token)
-        try:
-            entry= self.parseTable[NonTerminal][token_string.lower()]
-        except: 
-            return []
-        for word in entry.split(" "):
-            token= TokenType.string_to_token_type(word.upper())
-            if not token:  
-                # Couldnt match token type, therefore its a NonTerminal
-                production.append(word)
-            else:
-                # Could match tokentype, therefore its a terminal
-                production.append(token)
-        return production            # Could match tokentype, therefore its a terminal
-
 
 
 #----TEST----#
