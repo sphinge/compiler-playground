@@ -8,7 +8,7 @@ Include the function name in the appropriate place of the SDDHash
 I think the functions should only take one node as input. This node is defined in Tree.py
 """
 
-from TokenTypes import TokenType
+from src.Lexing.TokenTypes import TokenType
 
 #-------------------------
 # LABELS

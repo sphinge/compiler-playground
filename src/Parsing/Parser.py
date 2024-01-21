@@ -1,7 +1,7 @@
-from Tree import Tree_Wrapper
-from TokenTypes import TokenType
+from src.Parsing.Tree import Tree_Wrapper
+from src.Lexing.TokenTypes import TokenType
 
-class MyParser:
+class Parser:
     def __init__(self, tokenstrem, table):
         self.input=tokenstrem
         self.ParsingTable=table
@@ -61,14 +61,14 @@ class MyParser:
 
 
 if __name__=="__main__":
-    from Parser.ParsingTable import ParsingTable
-    from Parser.grammarHash import grammarHash
-    from lexer import Lexer
+    from Parsing.ParsingTable import ParsingTable
+    from src.Lexing.grammarHash import grammarHash
+    from src.Lexing.lexer import Lexer
     l= Lexer("ezctest.txt")
     l.generateTokens()
 
     parseTable = ParsingTable(grammarHash)
     parseTable.constructParseTable()
     parseTable.printTable()
-    p= MyParser(l.tokenList, parseTable)
+    p= Parser(l.tokenList, parseTable)
     p.parse()

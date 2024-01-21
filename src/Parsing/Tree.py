@@ -1,4 +1,4 @@
-from TokenTypes import TokenType
+from src.Lexing.TokenTypes import TokenType
 from Semantic.SDDHash import SDDHash
 import pydot
 class Tree_Wrapper():

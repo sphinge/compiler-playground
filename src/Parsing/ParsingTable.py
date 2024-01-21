@@ -1,5 +1,5 @@
-from Parser.grammarHash import grammarHash
-from TokenTypes import TokenType
+from src.Lexing.grammarHash import grammarHash
+from src.Lexing.TokenTypes import TokenType
 
 class ParsingTable:
     def __init__(self, grammarHashTable, separatorSymbol = '|', endSymbol = 'eof', startSymbol = None, epsilon = 'epsilon'):

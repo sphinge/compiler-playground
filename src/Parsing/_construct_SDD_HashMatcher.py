@@ -1,4 +1,4 @@
-from grammarHash import grammarHash
+from src.Lexing.grammarHash import grammarHash
 
 NTs= list(grammarHash.keys())
 

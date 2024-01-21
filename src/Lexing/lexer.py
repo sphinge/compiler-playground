@@ -1,4 +1,4 @@
-from TokenTypes import TokenType
+from src.Lexing.TokenTypes import TokenType
 import sys
 
 keywords = {

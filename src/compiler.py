@@ -1,8 +1,8 @@
-from lexer import Lexer
+from src.Lexing.lexer import Lexer
 from symboltableStack import SymboltableStack
-from Parser.ParsingTable import ParsingTable
-from Parser.grammarHash import grammarHash
-from MyParser import MyParser
+from Parsing.ParsingTable import ParsingTable
+from src.Lexing.grammarHash import grammarHash
+from src.Parsing.Parser import Parser
 import sys
 class Compiler:
     @staticmethod
@@ -19,7 +19,7 @@ class Compiler:
         pTable=ParsingTable(grammarHash)
         pTable.constructParseTable()
         pTable.printTable()
-        parser= MyParser(lexer.tokenList, pTable)
+        parser= Parser(lexer.tokenList, pTable)
         parse_tree=parser.parse()
 
         print(parse_tree.execute_IRGeneration())
