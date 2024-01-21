@@ -50,6 +50,7 @@ class Parser:
     def parse(self):
         while self.input!=[]:
             self.parse_step()
+            
         if self.stack==[]:
             print("DONE!")
             print(self.stack)
@@ -57,6 +58,8 @@ class Parser:
         else: 
             print(self.stack)
             print("Parsing Failed")
+    
+    def getParseTree(self):
         return self.tree
 
 

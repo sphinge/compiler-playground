@@ -4,6 +4,7 @@ from Parsing.ParsingTable import ParsingTable
 from src.Lexing.grammarHash import grammarHash
 from src.Parsing.Parser import Parser
 import sys
+
 class Compiler:
     @staticmethod
     def main():
@@ -16,11 +17,14 @@ class Compiler:
         lexer.generateTokens()
         print("\n\n LEXER OUTPUT: \n\n "+str(lexer.tokenList)+"\n\n")
         
-        pTable=ParsingTable(grammarHash)
+        pTable = ParsingTable(grammarHash)
         pTable.constructParseTable()
         pTable.printTable()
-        parser= Parser(lexer.tokenList, pTable)
-        parse_tree=parser.parse()
+
+        parser = Parser(lexer.tokenList, pTable)
+        parser.parse()
+
+        parse_tree = parser.getParseTree()
 
         print(parse_tree.execute_IRGeneration())
 
