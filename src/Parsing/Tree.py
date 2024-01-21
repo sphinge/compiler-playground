@@ -42,9 +42,6 @@ class Tree_Wrapper():
         for i, j in (self.edges):
             self.dot.add_edge(pydot.Edge(j,i))
         self.dot.write_png("output.png")                
-        
-    def generate_AST(self):
-        self.root.remove_NTs()
 
     def add_SDD_handler(self, token: tuple[str, int], production: list):
         first_element_of_production= production[0] if type(production[0])==str else TokenType.token_type_to_string(production[0])
@@ -90,15 +87,6 @@ class MyNode():
             ret= i.search(ID)
             if ret!=None:
                 return ret
-        
-    def getInorder(self):
-        return
-    
-    def remove_NTs(self):
-        if self.label.upper() in TokenType.__members__:
-            pass#print(self.label)
-        for i in self.children:
-            i.remove_NTs()
 
     def run_SDDs(self):
         # if functions are not yet implemented
