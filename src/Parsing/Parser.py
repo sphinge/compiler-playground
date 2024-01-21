@@ -63,7 +63,7 @@ class Parser:
 if __name__=="__main__":
     from Parsing.ParsingTable import ParsingTable
     from src.Lexing.grammarHash import grammarHash
-    from src.Lexing.lexer import Lexer
+    from src.Lexing.Lexer import Lexer
     l= Lexer("ezctest.txt")
     l.generateTokens()
 

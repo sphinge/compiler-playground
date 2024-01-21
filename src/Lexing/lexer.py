@@ -1,5 +1,4 @@
 from src.Lexing.TokenTypes import TokenType
-import sys
 
 keywords = {
     "int": TokenType.TYPE_INT,

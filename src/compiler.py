@@ -1,5 +1,5 @@
-from src.Lexing.lexer import Lexer
-from symboltableStack import SymboltableStack
+from src.Lexing.Lexer import Lexer
+from SymboltableStack import SymboltableStack
 from Parsing.ParsingTable import ParsingTable
 from src.Lexing.grammarHash import grammarHash
 from src.Parsing.Parser import Parser
