@@ -3,21 +3,18 @@ from src.Lexing.TokenTypes import TokenType
 
 class ParsingTable:
     def __init__(self, grammarHashTable, separatorSymbol = '|', endSymbol = 'eof', startSymbol = None, epsilon = 'epsilon'):
-        self.parseTable = {}
-        self.FIRST = {}
-        self.FOLLOW = {}
-        
-        self.grammar = grammarHashTable
-        self.nonTerminals = list(self.grammar.keys())
-
+        self.parseTable      = {}
+        self.FIRST           = {}
+        self.FOLLOW          = {}
+        self.grammar         = grammarHashTable
+        self.nonTerminals    = list(self.grammar.keys())
         self.separatorSymbol = separatorSymbol
-        self.endSymbol = endSymbol
-        self.startSymbol = startSymbol if startSymbol != None else self.nonTerminals[0]
-        self.epsilon = epsilon
+        self.endSymbol       = endSymbol
+        self.startSymbol     = startSymbol if startSymbol != None else self.nonTerminals[0]
+        self.epsilon         = epsilon
 
         self.initParseTable()
         self.initSets()
-
         self.generateSets()
         self.printSets()
 
@@ -182,7 +179,7 @@ class ParsingTable:
 
 #----TEST----#
     
-if __name__=="__main__":
+if __name__ == "__main__":
     parseTable = ParsingTable(grammarHash)
     parseTable.constructParseTable()
     parseTable.printTable()

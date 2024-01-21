@@ -6,6 +6,7 @@ from src.Parsing.Parser import Parser
 import sys
 
 class Compiler:
+
     @staticmethod
     def main():
         # TODO: handle wrong inputs
@@ -13,6 +14,7 @@ class Compiler:
             ezcFilePath = sys.argv[1]
         else:
             ezcFilePath="src/ezctest.txt"
+            
         lexer = Lexer(ezcFilePath)
         lexer.generateTokens()
         print("\n\n LEXER OUTPUT: \n\n "+str(lexer.tokenList)+"\n\n")

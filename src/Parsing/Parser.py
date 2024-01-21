@@ -3,19 +3,22 @@ from src.Lexing.TokenTypes import TokenType
 
 class Parser:
     def __init__(self, tokenstrem, table):
-        self.input=tokenstrem
-        self.ParsingTable=table
-        self.stack= [("PROGRAM", 1)]
-        self.tree=Tree_Wrapper()
+        self.input        = tokenstrem
+        self.ParsingTable = table
+        self.stack        = [("PROGRAM", 1)]
+        self.tree         = Tree_Wrapper()
+
         self.tree.addNode("PROGRAM")
 
     def parse_step(self):
-        lookahead=self.input[0]
-        token=self.stack[0]
+        lookahead = self.input[0]
+        token = self.stack[0]
+
         if token[0] == "epsilon":
             self.stack.pop(0)
             return
-        if type(token[0])==TokenType and token[0]==lookahead[0]:
+        
+        if type(token[0]) == TokenType and token[0] == lookahead[0]:
             self.stack.pop(0)
             self.input.pop(0)
 
@@ -23,35 +26,41 @@ class Parser:
             if lookahead[1]!=None: 
                 Node=self.tree.find(token[1])
                 Node.lexval= lookahead[1]
+
             print("matched: ")
             print(token)
             return
+        
         elif type(token[0])==TokenType:
             self.tree.print()
             raise Exception(f"EXPECTED: {token}, GOT:{lookahead}")
-        production=self.ParsingTable.get_table_entry(token[0], lookahead[0])
+        
+        production = self.ParsingTable.get_table_entry(token[0], lookahead[0])
+
         if production == []:
             self.tree.print()
             raise Exception(f"EXPECTED: {token}, GOT:{lookahead}")
+        
         self.stack.pop(0)
-        stack_acc=[]
+        stack_acc = []
+
         for i in (production):
-            if not type(i)==TokenType:
-                id=self.tree.addNode(i, token[1])
+            if not type(i) == TokenType:
+                id = self.tree.addNode(i, token[1])
+                stack_acc.append((i, id))
+            else:
+                id = self.tree.addNode(TokenType.token_type_to_string(i), token[1])
                 stack_acc.append((i, id))
 
-            else:
-                id= self.tree.addNode(TokenType.token_type_to_string(i), token[1])
-                stack_acc.append((i, id))
         self.tree.add_SDD_handler(token, production)
         self.stack= stack_acc+self.stack
         
 
     def parse(self):
-        while self.input!=[]:
+        while self.input != []:
             self.parse_step()
-            
-        if self.stack==[]:
+
+        if self.stac == []:
             print("DONE!")
             print(self.stack)
             self.tree.print()
@@ -59,6 +68,7 @@ class Parser:
             print(self.stack)
             print("Parsing Failed")
     
+
     def getParseTree(self):
         return self.tree
 
@@ -67,11 +77,11 @@ if __name__=="__main__":
     from Parsing.ParsingTable import ParsingTable
     from src.Lexing.grammarHash import grammarHash
     from src.Lexing.Lexer import Lexer
-    l= Lexer("ezctest.txt")
+    l = Lexer("ezctest.txt")
     l.generateTokens()
 
     parseTable = ParsingTable(grammarHash)
     parseTable.constructParseTable()
     parseTable.printTable()
-    p= Parser(l.tokenList, parseTable)
+    p = Parser(l.tokenList, parseTable)
     p.parse()

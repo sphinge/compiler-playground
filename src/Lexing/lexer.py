@@ -25,14 +25,13 @@ keywords = {
 #ezcFilePath = sys.argv[1] #TODO: handle wrong intputs
 
 class Lexer:
-    def __init__(self, filePath, pSymbolTable=None):
-        self.filePath = filePath
-        self.pSymbolTable = {}
-
-        self.tokenList = []
-        self.lexemeBegin = 0
-        self.forward = 0
-        self.currentLine = ""
+    def __init__(self, filePath, pSymbolTable={}):
+        self.filePath     = filePath
+        self.pSymbolTable = pSymbolTable
+        self.tokenList    = []
+        self.lexemeBegin  = 0
+        self.forward      = 0
+        self.currentLine  = ""
 
     def generateTokens(self):
         file = open(self.filePath, 'r')
@@ -122,6 +121,7 @@ class Lexer:
 
         if self.lookahead() == '.':
             self.advance()
+
             if self.isDigit(self.lookahead()): 
                 while self.isDigit(self.lookahead()):
                     self.advance()
@@ -131,13 +131,14 @@ class Lexer:
             self.consumeToken(TokenType.FLOAT, float(self.currentLine[self.lexemeBegin:self.forward+1]))
         else:
             self.consumeToken(TokenType.INT, int(self.currentLine[self.lexemeBegin:self.forward+1]))
+
     def handleIdentifier(self):
         while self.isAlphaNumeric(self.lookahead()): 
             self.advance()
 
         identifier = self.currentLine[self.lexemeBegin:self.forward+1]
-
         keyword = keywords.get(identifier) #test if identifier matches any keyword
+
         if keyword: 
             self.consumeToken(keyword)
         else:
