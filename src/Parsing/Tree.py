@@ -55,8 +55,12 @@ class Tree_Wrapper():
 
         node = self.find(token[1])
         if node:
-            node.SDD_inherit_func = sdd_function_handles[0]
-            node.SDD_synthesize_func = sdd_function_handles[1]
+            emptySDDValue = "$$$$"
+            if sdd_function_handles == emptySDDValue:
+                node.SDD_inherit_func = emptySDDValue
+            else:
+                node.SDD_inherit_func = sdd_function_handles[0]
+                node.SDD_synthesize_func = sdd_function_handles[1]
 
     def execute_IRGeneration(self) -> str:
         self.root.run_SDDs()

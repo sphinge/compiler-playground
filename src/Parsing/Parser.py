@@ -17,7 +17,7 @@ class Parser:
         while self.input != []:
             self.parse_step()
 
-        if self.stac == []:
+        if self.stack == []:
             print("DONE!")
             print(self.stack)
             self.tree.print()
