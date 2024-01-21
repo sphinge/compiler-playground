@@ -67,8 +67,8 @@ class Parser:
                 id = self.tree.addNode(TokenType.token_type_to_string(i), token[1])
                 stack_acc.append((i, id))
 
-        self.tree.add_SDD_handler(token, production)
-        self.stack= stack_acc+self.stack
+        self.tree.add_SDD_function_handles(token, production)
+        self.stack = stack_acc + self.stack
 
 
 if __name__=="__main__":

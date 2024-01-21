@@ -9,7 +9,7 @@ class Tree_Wrapper():
         self.edges = []
         self.size  = 0
 
-    def addNode(self, name:str, parentID:int|None = None, literal:str|None = None):
+    def addNode(self, name: str, parentID: int|None = None, literal: str|None = None):
         if parentID == None:
             self.size += 1
             self.root = Tree_Node(str(self.size), label = name)
@@ -19,7 +19,7 @@ class Tree_Wrapper():
         parent = self.find(str(parentID))
 
         if parent == None:
-            raise Exception(f"NO NODE WITH ID {parentID}")
+            raise Exception(f"NO PARENT-NODE WITH ID {parentID}")
         
         self.size += 1
         self.edges.append((str(self.size),str(parentID)+"\n"))
@@ -49,13 +49,14 @@ class Tree_Wrapper():
 
         self.dot.write_png("output.png")                
 
-    def add_SDD_handler(self, token: tuple[str, int], production: list):
+    def add_SDD_function_handles(self, token: tuple[str, int], production: list):
         first_element_of_production = production[0] if type(production[0]) == str else TokenType.token_type_to_string(production[0])
-        function = SDDHash[token[0]][first_element_of_production]
-        node = self.find(token[1])
+        sdd_function_handles = SDDHash[token[0]][first_element_of_production]
 
+        node = self.find(token[1])
         if node:
-            node.SDD = function
+            node.SDD_inherit_func = sdd_function_handles[0]
+            node.SDD_synthesize_func = sdd_function_handles[1]
 
     def execute_IRGeneration(self) -> str:
         self.root.run_SDDs()
@@ -70,8 +71,9 @@ class Tree_Node():
         self.label    = label
 
         # SDD logic
-        self.SDD    = None
-        self.lexval = None
+        self.SDD_inherit_func    = None
+        self.SDD_synthesize_func = None
+        self.lexval     = None
 
         # SDD TypChecking
         self.type = None
@@ -99,20 +101,24 @@ class Tree_Node():
 
     def run_SDDs(self):
         # if functions are not yet implemented
-        if self.SDD == "$$$$":
+        if self.SDD_inherit_func == "$$$$":
             self.code = f"\n // --------------------- \n // Code for {self.label} \n // --------------------- \n"
             self.type = f"{self.label}.type"
             return
         
-        if TokenType.string_to_token_type(self.label.upper()) == None and not self.label == "epsilon": # if self.label is NonTerminal
-            if self.SDD[0]:
-                self.SDD[0](self)
+        cond1 = TokenType.string_to_token_type(self.label.upper()) == None
+        cond2 = self.label != "epsilon"
+        labelIsNonterminal = cond1 and cond2
+        
+        if labelIsNonterminal:
+            if self.SDD_inherit_func:
+                self.SDD_inherit_func(self)
 
             for child in (self.children):
                 child.run_SDDs()
 
-            if self.SDD[1]:
-                self.SDD[1](self)
+            if self.SDD_synthesize_func:
+                self.SDD_synthesize_func(self)
         
 
 class SDD_Handlers():
