@@ -8,8 +8,7 @@ Include the function name in the appropriate place of the SDDHash
 I think the functions should only take one node as input. This node is defined in Tree.py
 """
 
-from src.Lexing.TokenTypes import TokenType
-from src.Parsing.Tree import Tree_Node
+from ezC_blue.Lexing.TokenTypes import TokenType
 
 #-------------------------
 # LABELS
@@ -32,25 +31,25 @@ def Label(name:str = ""):
 
 # LABELS
 #-------------------------------
-def inherit_next_2_children(node: Tree_Node):
+def inherit_next_2_children(node):
     l = Label("next")
     node.children[0].next = l
     node.managed_labels["next"] = l
     node.children[1].next = node.next
 
-def synth_code_2_children(node: Tree_Node):
+def synth_code_2_children(node):
     node.code = node.children[0].code + node.managed_labels["next"]["code"] + node.children[1].code
 
-def inherit_next_1_child(node: Tree_Node):
+def inherit_next_1_child(node):
     node.children[0].next = node.next
 
-def synth_code_1_child(node: Tree_Node):
+def synth_code_1_child(node):
     node.code = node.children[0].code
 
-def synth_code_epsilon(node: Tree_Node):
+def synth_code_epsilon(node):
     node.code = ""
 
-def TYPE_synth_expected_type_and_width(node: Tree_Node):
+def TYPE_synth_expected_type_and_width(node):
     # get base type from type keyword
     token= TokenType.string_to_token_type(node.children[0].label.upper())
 
@@ -72,13 +71,13 @@ def TYPE_synth_expected_type_and_width(node: Tree_Node):
         
     node.code= node.type
     
-def TYPE_synth_type_from_Symbol_Table(node: Tree_Node):
+def TYPE_synth_type_from_Symbol_Table(node):
     pass # TODO: Lookup previously declared value from symboltable
 
-def inherit_next_to_last_child(node: Tree_Node):
+def inherit_next_to_last_child(node):
     node.children[len(node.children)-1].next = node.next
 
-def ASSIGNMENT_synth(node: Tree_Node):
+def ASSIGNMENT_synth(node):
     # CHECK TYPE
     expected_type = node.children[0].type
     actual_type = node.children[3].type
@@ -95,11 +94,11 @@ def ASSIGNMENT_synth(node: Tree_Node):
     # TODO:SYMBOL TABLE UPDATE
     #node.symbol_table.add?
     
-def EXPRSTMT_synth(node: Tree_Node):
+def EXPRSTMT_synth(node):
     node.type = node.children[0].type
     node.code = node.children[0].code
 
-def IFSTMT_inherit(node: Tree_Node):
+def IFSTMT_inherit(node):
     T= Label("Cond_True"),
     F = Label("Cond_False")
 
@@ -114,11 +113,11 @@ def IFSTMT_inherit(node: Tree_Node):
 
     node.children[5].next = node.next
 
-def IFSTMT_synth(node: Tree_Node):
+def IFSTMT_synth(node):
     expression = node.children[2]
     statement1 = node.children[4]
     statement2 = node.children[5]
     node.code = f"{expression.code} {node.managed_labels['True']['code']} {statement1.code} {node.managed_labels['False']['code']} {statement2.code}"
     
-def synth_code_from_last_child(node: Tree_Node):
+def synth_code_from_last_child(node):
     node.code = node.children[len(node.children)-1].code

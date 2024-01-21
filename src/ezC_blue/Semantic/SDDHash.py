@@ -24,7 +24,7 @@ To be expanded, as i do not understand SDD fully myself :(
 
 Code generation
 """
-from Semantic.SDDFunctions import *
+from ezC_blue.Semantic.SDDFunctions import *
 
 SDDHash = {
   "PROGRAM": {
