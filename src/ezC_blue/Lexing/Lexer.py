@@ -96,7 +96,7 @@ class Lexer:
             return False
     
     def skipComment(self):
-        while self.peek() != '\n' and not self.reachedEnd():
+        while not self.reachedEnd() and self.peek() != '\n':
             self.advance()
 
     def handleString(self):
