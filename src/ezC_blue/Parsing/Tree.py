@@ -7,13 +7,14 @@ class Tree_Wrapper():
         self.root  = None
         self.dot   = pydot.Dot("ParseTree", graph_type="digraph")
         self.edges = []
+        self.nodes = []
         self.size  = 0
 
     def addNode(self, name: str, parentID: int|None = None, literal: str|None = None):
         if parentID == None:
             self.size += 1
             self.root = Tree_Node(str(self.size), label = name)
-            self.dot.add_node(pydot.Node(str(self.size), label = name, rank = "max"))
+            self.nodes.append(self.root)
             return self.size
 
         parent = self.find(str(parentID))
@@ -23,12 +24,13 @@ class Tree_Wrapper():
         
         self.size += 1
         self.edges.append((str(self.size),str(parentID)+"\n"))
-        self.dot.add_node(pydot.Node(str(self.size), label = name))
 
         newNode = Tree_Node(str(self.size), label=name)
         newNode.lexval = literal
         parent.add_child(newNode)
 
+        self.nodes.append(newNode)
+        
         return self.size
 
     def addToLatestNode(self, name):
@@ -44,9 +46,15 @@ class Tree_Wrapper():
         return self.root.search(ID)
 
     def print(self):
-        for i, j in (self.edges):
-            self.dot.add_edge(pydot.Edge(j,i))
+        for i, node in enumerate(self.nodes):
+            print(f"Printing Tree ... Creating Node {i} of {self.size}")
+            self.dot.add_node(pydot.Node(str(node.ID), label = f"{node.label}: {node.lexval}"))
 
+        
+        for i, j in (self.edges):
+            print(f"Printing Tree ... Creating edges")
+            self.dot.add_edge(pydot.Edge(j,i))
+        print("Printing Tree to output.png")
         self.dot.write_png("output.png")                
 
     def add_SDD_function_handles(self, token: tuple[str, int], production: list):

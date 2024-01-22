@@ -22,7 +22,7 @@ def Label(name:str = ""):
 
     l = {
             "code": name + str(idx) + ":",
-            "name": name,
+            "name": name+ str(idx),
             "id":   idx
     }
 
@@ -43,6 +43,7 @@ def Temp(type):
     
     t= {
         "code": type+" t"+str(idx),
+        "name": "t"+str(idx),
         "id": idx
     }
     all_temps.append(t)
@@ -125,22 +126,29 @@ def IFSTMT_inherit(node):
     T = Label("Cond_True")
     F = Label("Cond_False")
 
-    node.children[2].true_Label  = T
-    node.children[2].false_Label = F
+    node.children[2].true_label  = T
+    node.children[2].false_label = F
     node.managed_labels["True"]  = T
     node.managed_labels["False"] = F
     
-    true_next = Label("next")
-    node.children[4].next = true_next
-    node.managed_labels["True_next"] = true_next
+    true_next = node.next
+    node.children[5].next = true_next
 
-    node.children[5].next = node.next
+    node.children[7].next = node.next
 
 def IFSTMT_synth(node):
     expression = node.children[2]
-    statement1 = node.children[4]
-    statement2 = node.children[5]
-    node.code = f"{expression.code} {node.managed_labels['True']['code']} {statement1.code} {node.managed_labels['False']['code']} {statement2.code}"
+    statement1 = node.children[5]
+    ifstmtx = node.children[7]
+    node.code = f"""
+{expression.code} 
+if ({expression.res['name']}) goto {node.managed_labels['True']['name']};
+if !({expression.res['name']}) goto {node.managed_labels['False']['name']};
+{node.managed_labels['True']['code']}
+    {statement1.code} 
+{node.managed_labels['False']['code']} 
+    {ifstmtx.code}
+"""
     
 def synth_code_from_last_child(node):
     node.code = node.children[len(node.children)-1].code
@@ -162,7 +170,7 @@ def WHILESTMT_inherit(node):
 def WHILESTMT_synth(node):
     expression = node.children[2]
     statement = node.children[5]
-    node.code= f"{node.managed_labels['start']['code']} {expression.code} {node.managed_labels['True']['code']} {statement.code}"
+    node.code= f"{node.managed_labels['start']['code']} {expression.code} {node.managed_labels['True']['code']} {statement.code} \n goto {node.managed_labels['start']['name']}"
     
 def PRINTSTMT_inherit(node):
     expression= node.children[1]
@@ -185,15 +193,13 @@ def PRINTSTMT_synth(node):
     
     node.code= f'{expression.code} {node.managed_labels["EXPR_next"]["code"]} printf("{c_type_id}", {expression.res})'
     
-def pass_on_TF_to_first_child(node):
-    child= node.children[0]    
-    if node.true_label:
-        child.true_label= node.true_label
-    if node.false_label:
-        child.false_label= node.false_label
 
 def EXPR_inherit(node):
-    pass_on_TF_to_first_child(node)
+    for child in node.children:
+        if node.true_label:
+            child.true_label= node.true_label
+        if node.false_label:
+            child.false_label= node.false_label
     
 def EXPR_bool_synth(node):
     elevel1 = node.children[0]
@@ -207,17 +213,15 @@ def EXPR_bool_synth(node):
         node.type= None
     else:
         node.type= elevel1.type
-
-    if node.true_label and exprx.code:
-        pass
-    elif node.true_label:
-        pass
-    if exprx.code:
-        node.res= Temp("bool")
-        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} {operand} {exprx.res};'
-    else:
+    
+    if exprx.code=="" and exprx.res==None:
         node.res= elevel1.res
-        node.code= f'{elevel1.code}'
+        node.code=elevel1.code
+    else:
+        node.res= Temp("bool")
+        exprx_code= exprx.code if exprx.code!=None else ""
+        node.code = f' {elevel1.code} {exprx_code} {node.res["code"]} = {elevel1.res["name"]} {operand} {exprx.res["name"]}; '
+
         
 def EXPR_number_synth(node):
     elevel1 = node.children[0]
@@ -244,8 +248,45 @@ def EXPR_number_synth(node):
         node.code= f'{elevel1.code}'
         
 def EXPRX_synth(node):
-    node.operand= node.children[0]
+    node.operand= node.children[0].label
     expr = node.children[1]
     
     node.res = expr.res
     node.code = expr.code
+    
+def EXPR_invert_synth(node):
+    operant_token= node.children[0].label
+    expr = node.children[1]
+    
+    node.type = expr.type
+    if node.type=="str":
+        print("TYPE ERROR")
+    
+    node.res = Temp(node.type)
+    node.code =f'{expr.code} \n {node.res} = {operant_token} {expr.res}'
+    
+def EXPR_L6_synth(node):
+    node.code= node.children[0].code
+    node.res = node.children[0].res
+    node.type = node.children[0].type
+
+
+def EXPR_PRIMARY_synth(node):
+    only_child= node.children[0]
+    node.type = only_child.type
+    node.res = only_child.res
+    node.code = only_child.code
+
+def EXPR_PRIMARY_getValue_synth(node):
+    child= node.children[0]
+
+    match child.label:
+        case "true":
+            node.type="bool"
+            node.res={"name":"true"}
+        case "false":
+            node.type="bool"
+            node.res={"name":"false"}
+        case _:
+            node.type= child.label
+            node.res= {"name":child.lexval}

@@ -62,7 +62,7 @@ class Parser:
 
         for i in (production):
             if not type(i) == TokenType:
-                id = self.tree.addNode(i, token[1])
+                id = self.tree.addNode(i,token[1])
                 stack_acc.append((i, id))
             else:
                 id = self.tree.addNode(TokenType.token_type_to_string(i), token[1])

@@ -120,7 +120,7 @@ SDDHash = {
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL3": {
-    "ELEVEL4":  (EXPR_inherit, EXPR_number_synth)
+    "ELEVEL4":  (EXPR_inherit, EXPR_bool_synth)
   },
   "ELEVEL3X": {
     "COMPOPERATORS": "$$$$",
@@ -135,7 +135,7 @@ SDDHash = {
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL5": {
-    "ELEVEL6": "$$$$"
+    "ELEVEL6": (EXPR_inherit, EXPR_number_synth)
   },
   "ELEVEL5X": {
     "/": (EXPR_inherit, EXPRX_synth),
@@ -143,21 +143,21 @@ SDDHash = {
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL6": {
-    "!": "$$$$",
-    "-": "$$$$",
-    "ELEVEL6X": "$$$$"
+    "!": (EXPR_inherit, EXPR_invert_synth),
+    "-": (EXPR_inherit, EXPR_invert_synth),
+    "ELEVEL6X": (EXPR_inherit, EXPR_L6_synth),
   },
   "ELEVEL6X": {
-    "PRIMARY": "$$$$",
+    "PRIMARY": (EXPR_inherit, EXPR_PRIMARY_synth),
     "FUNCCALLORVARIABLE": "$$$$"
   },
   "PRIMARY": {
-    "true": "$$$$",
-    "false": "$$$$",
-    "nil": "$$$$",
-    "float": "$$$$",
-    "int": "$$$$",
-    "string": "$$$$",
+    "true": (EXPR_inherit, EXPR_PRIMARY_getValue_synth),
+    "false": (EXPR_inherit, EXPR_PRIMARY_getValue_synth),
+    "nil": "$$$$",#(EXPR_inherit, EXPR_PRIMARY_getValue_synth),
+    "float": (EXPR_inherit, EXPR_PRIMARY_getValue_synth),
+    "int": (EXPR_inherit, EXPR_PRIMARY_getValue_synth),
+    "string": (EXPR_inherit, EXPR_PRIMARY_getValue_synth),
     "(": "$$$$"
   },
   "FUNCCALLORVARIABLE": {
