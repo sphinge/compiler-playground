@@ -1,3 +1,8 @@
+string d = "hello";
+string Y = "HELLP";
 if (2==30){
     print d;
+}
+while (5000==d){
+    print y;
 }

@@ -193,7 +193,7 @@ def PRINTSTMT_synth(node):
         case _:
             c_type_id= f'C-typeSpecifier({expression.type})'
     
-    node.code= f'{expression.code} {node.managed_labels["EXPR_next"]["code"]} printf("{c_type_id}", {expression.res})'
+    node.code= f'{expression.code} {node.managed_labels["EXPR_next"]["code"]} printf("{c_type_id}", {expression.res["name"]});'
     
 
 def EXPR_inherit(node):
@@ -304,7 +304,18 @@ def VARORCALL_synth(node):
     identifier = node.children[0]
     variablename= identifier.lexval
     
-    node.res = variablename
-    node.code = ""
-    node.type = f"symboltable.lookup {variablename}"
-    #TQDO: support function calls
+    funcallx= node.children[1]
+    if (funcallx.code)=="":
+        node.res = {"name":variablename}
+        node.code = ""
+        node.type = f"symboltable.lookup {variablename}"
+    else: # THIS MEANS ITS A FUNCTION
+        arguments= node.children[2]
+        node.type = f"symboltable.lookup {variablename}"
+        node.res= Temp(node.type)
+        node.code= f"""{node.res} = {variablename}{arguments.code}; \n"""
+        
+def FUNCX_synth(node):
+    arguments= node.children[1]
+    node.code= f"""({arguments.code})""" # NO TYPECHEKING FUCNTIONs
+    

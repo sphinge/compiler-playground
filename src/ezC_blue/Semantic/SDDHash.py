@@ -165,7 +165,7 @@ SDDHash = {
   },
   "FUNCCALLX": {
     "(": "$$$$",
-    "epsilon": "$$$$"
+    "epsilon": (None, synth_code_epsilon)
   },
   "COMPOPERATORS": {
     "<=": "$$$$",
