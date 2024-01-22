@@ -190,6 +190,8 @@ def PRINTSTMT_synth(node):
             c_type_id= "%s"
         case "float":
             c_type_id= "%f"
+        case _:
+            c_type_id= f'C-typeSpecifier({expression.type})'
     
     node.code= f'{expression.code} {node.managed_labels["EXPR_next"]["code"]} printf("{c_type_id}", {expression.res})'
     
@@ -280,6 +282,7 @@ def EXPR_PRIMARY_synth(node):
 def EXPR_PRIMARY_getValue_synth(node):
     child= node.children[0]
 
+    node.code= ""
     match child.label:
         case "true":
             node.type="bool"
@@ -290,3 +293,18 @@ def EXPR_PRIMARY_getValue_synth(node):
         case _:
             node.type= child.label
             node.res= {"name":child.lexval}
+            
+def EXPR_identifier_synth(node):
+    funcOrVar = node.children[0]
+    node.code= funcOrVar.code
+    node.res= funcOrVar.res
+    node.type = funcOrVar.type
+    
+def VARORCALL_synth(node):
+    identifier = node.children[0]
+    variablename= identifier.lexval
+    
+    node.res = variablename
+    node.code = ""
+    node.type = f"symboltable.lookup {variablename}"
+    #TQDO: support function calls

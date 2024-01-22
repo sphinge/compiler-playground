@@ -149,7 +149,7 @@ SDDHash = {
   },
   "ELEVEL6X": {
     "PRIMARY": (EXPR_inherit, EXPR_PRIMARY_synth),
-    "FUNCCALLORVARIABLE": "$$$$"
+    "FUNCCALLORVARIABLE": (EXPR_inherit, EXPR_identifier_synth)
   },
   "PRIMARY": {
     "true": (EXPR_inherit, EXPR_PRIMARY_getValue_synth),
@@ -161,7 +161,7 @@ SDDHash = {
     "(": "$$$$"
   },
   "FUNCCALLORVARIABLE": {
-    "identifier": "$$$$"
+    "identifier": (EXPR_inherit, VARORCALL_synth)
   },
   "FUNCCALLX": {
     "(": "$$$$",
