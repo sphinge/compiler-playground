@@ -1,7 +1,8 @@
-;
-2;
-"asdffa"
-32345.123
-(){};
-var i <=23;
-var j =(i +1) * 2; // alksdjhfkj<<<=>//()
+float a= b;
+string d = "2";
+int x=0;
+while (x<1000){
+    int x= x+1;
+    print(x);
+    print(x*b);
+}

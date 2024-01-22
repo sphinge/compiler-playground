@@ -1,5 +1,5 @@
-from ezC_blue.Lexing.grammarHash import grammarHash
-from ezC_blue.Lexing.TokenTypes import TokenType
+from Lexing.grammarHash import grammarHash
+from Lexing.TokenTypes import TokenType
 
 class ParsingTable:
     def __init__(self, grammarHashTable, separatorSymbol = '|', endSymbol = 'eof', startSymbol = None, epsilon = 'epsilon'):

@@ -1,9 +1,9 @@
 import sys
-from ezC_blue.Lexing.Lexer import Lexer
-from ezC_blue.Lexing.grammarHash import grammarHash
-from ezC_blue.Parsing.ParsingTable import ParsingTable
-from ezC_blue.Parsing.Parser import Parser
-from ezC_blue.SymboltableStack import SymboltableStack
+from Lexing.Lexer import Lexer
+from Lexing.grammarHash import grammarHash
+from Parsing.ParsingTable import ParsingTable
+from Parsing.Parser import Parser
+from SymboltableStack import SymboltableStack
 
 class Compiler:
 

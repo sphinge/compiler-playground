@@ -1,5 +1,5 @@
-from ezC_blue.Lexing.TokenTypes import TokenType
-from ezC_blue.Semantic.SDDHash import SDDHash
+from Lexing.TokenTypes import TokenType
+from Semantic.SDDHash import SDDHash
 import pydot
 
 class Tree_Wrapper():

@@ -1,4 +1,4 @@
-from ezC_blue.Lexing.TokenTypes import TokenType
+from Lexing.TokenTypes import TokenType
 
 keywords = {
     "int": TokenType.TYPE_INT,

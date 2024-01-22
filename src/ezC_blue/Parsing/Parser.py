@@ -1,5 +1,5 @@
-from ezC_blue.Parsing.Tree import Tree_Wrapper
-from ezC_blue.Lexing.TokenTypes import TokenType
+from Parsing.Tree import Tree_Wrapper
+from Lexing.TokenTypes import TokenType
 
 class Parser:
     def __init__(self, tokenstrem, table):

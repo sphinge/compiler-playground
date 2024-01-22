@@ -8,7 +8,7 @@ Include the function name in the appropriate place of the SDDHash
 I think the functions should only take one node as input. This node is defined in Tree.py
 """
 
-from ezC_blue.Lexing.TokenTypes import TokenType
+from Lexing.TokenTypes import TokenType
 
 #-------------------------
 # LABELS
@@ -61,8 +61,8 @@ def TYPE_synth_expected_type_and_width(node):
             node.type= "float"
             node.width= 32
         case TokenType.TYPE_STR:  # in case of string we do not have any possible array
-            node.type= "str"
-            return
+            node.type= "string"
+            node.width= None
         case TokenType.TYPE_BOOL:
             node.type= "bool"
             node.width= 16
@@ -121,3 +121,9 @@ def IFSTMT_synth(node):
     
 def synth_code_from_last_child(node):
     node.code = node.children[len(node.children)-1].code
+
+def WHILESTMT_inherit(node):
+    T = Label("Cond_True")
+    F= node.next
+    
+    node.children[1]
