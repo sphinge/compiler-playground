@@ -87,8 +87,8 @@ class Tree_Node():
         self.res            = None
         self.managed_labels = {}
         self.next           = None
-        self.true           = None
-        self.false          = None
+        self.true_label     = None
+        self.false_label    = None
 
         
     def add_child(self, new):

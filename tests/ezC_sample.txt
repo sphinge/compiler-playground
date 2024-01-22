@@ -6,3 +6,6 @@ while (x<1000){
     print(x);
     print(x*b);
 }
+if (a==b){
+    print d;
+}

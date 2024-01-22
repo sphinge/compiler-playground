@@ -69,10 +69,10 @@ SDDHash = {
     "epsilon": (None, synth_code_epsilon)
   },
   "PRINTSTMT": {
-    "print": "$$$$"
+    "print": (PRINTSTMT_inherit, PRINTSTMT_synth)
   },
   "WHILESTMT": {
-    "while": "$$$$"
+    "while": (WHILESTMT_inherit, WHILESTMT_synth)
   },
   "RETURNSTMT": {
     "return": "$$$$"
@@ -99,7 +99,7 @@ SDDHash = {
     "epsilon": "$$$$"
   },
   "EXPRESSION": {
-    "ELEVEL1": "$$$$"
+    "ELEVEL1": (EXPR_inherit, EXPR_synth)
   },
   "EXPRESSIONX": {
     "or": "$$$$",

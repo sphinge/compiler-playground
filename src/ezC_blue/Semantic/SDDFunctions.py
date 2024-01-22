@@ -31,6 +31,29 @@ def Label(name:str = ""):
 
 # LABELS
 #-------------------------------
+
+#-------------------------------
+# TEMP VARIABLES
+temp_count=0
+all_temps=[]
+def Temp(type):
+    global temp_count, all_temps
+    idx= temp_count
+    temp_count += 1
+    
+    t= {
+        "code": type+" t"+str(idx),
+        "id": idx
+    }
+    all_temps.append(t)
+    return t
+    
+# TEMP VARIABLES
+#-------------------------------
+
+
+
+
 def inherit_next_2_children(node):
     l = Label("next")
     node.children[0].next = l
@@ -99,7 +122,7 @@ def EXPRSTMT_synth(node):
     node.code = node.children[0].code
 
 def IFSTMT_inherit(node):
-    T= Label("Cond_True"),
+    T = Label("Cond_True")
     F = Label("Cond_False")
 
     node.children[2].true_Label  = T
@@ -125,5 +148,73 @@ def synth_code_from_last_child(node):
 def WHILESTMT_inherit(node):
     T = Label("Cond_True")
     F= node.next
+    start = Label("While_Start")
     
-    node.children[1]
+    node.children[2].true_label = T
+    node.children[2].false_label= F
+    
+    node.managed_labels["True"]= T
+    node.managed_labels["start"]= start
+    # No need to manage F label
+    
+    node.children[4].next= start
+    
+def WHILESTMT_synth(node):
+    expression = node.children[2]
+    statement = node.children[5]
+    node.code= f"{node.managed_labels['start']['code']} {expression.code} {node.managed_labels['True']['code']} {statement.code}"
+    
+def PRINTSTMT_inherit(node):
+    expression= node.children[1]
+    next=  Label("next")
+    expression.next= next
+    node.managed_labels["EXPR_next"]=next
+    # Hope this is all
+    
+def PRINTSTMT_synth(node):
+    expression= node.children[1]
+    
+    c_type_id = ""
+    match expression.type:
+        case "int":
+            c_type_id= "%d"
+        case "string":
+            c_type_id= "%s"
+        case "float":
+            c_type_id= "%f"
+    
+    node.code= f'{expression.code} {node.managed_labels["EXPR_next"]["code"]} printf("{c_type_id}", {expression.res})'
+    
+def pass_on_TF_to_first_child(node):
+    child= node.children[0]    
+    if node.true_label:
+        child.true_label= node.true_label
+    if node.false_label:
+        child.false_label= node.false_label
+
+def EXPR_inherit(node):
+    pass_on_TF_to_first_child(node)
+    
+def EXPR_synth(node):
+    elevel1 = node.children[0]
+    exprx = node.children[1]
+    
+    # type checking
+    if exprx.type==None:
+        node.type= elevel1.type
+    elif exprx.type!= elevel1.type:
+        print("TYPE ERROR")
+        node.type= None
+    else:
+        node.type= elevel1.type
+
+    if node.true_label and exprx.code:
+        pass
+    elif node.true_label:
+        pass
+    elif exprx.code:
+        node.res= Temp("bool")
+        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} || {exprx.code};'
+    else:
+        node.res= elevel1.res
+        node.code= f'{elevel1.code}'
