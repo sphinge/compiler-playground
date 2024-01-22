@@ -21,7 +21,7 @@ grammarHash = {
     "EXPRESSION": "ELEVEL1 EXPRESSIONX",
     "EXPRESSIONX": "or EXPRESSION|epsilon",
     "ELEVEL1": "ELEVEL2 ELEVEL1X",
-    "ELEVEL1X": "&& ELEVEL1|epsilon",
+    "ELEVEL1X": "and ELEVEL1|epsilon",
     "ELEVEL2": "ELEVEL3 ELEVEL2X",
     "ELEVEL2X": "== ELEVEL2|epsilon",
     "ELEVEL3": "ELEVEL4 ELEVEL3X",

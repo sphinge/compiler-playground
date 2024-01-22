@@ -1,6 +1,9 @@
 float a= b;
 string d = "2";
 int x=0;
+bool x= true;
+bool y= false;
+bool z= (x or y) and y;
 while (x<1000){
     int x= x+1;
     print(x);

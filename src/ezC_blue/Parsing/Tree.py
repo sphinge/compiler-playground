@@ -89,7 +89,7 @@ class Tree_Node():
         self.next           = None
         self.true_label     = None
         self.false_label    = None
-
+        self.operand        = None
         
     def add_child(self, new):
         self.children.append(new)

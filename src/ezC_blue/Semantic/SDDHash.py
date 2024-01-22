@@ -99,17 +99,17 @@ SDDHash = {
     "epsilon": "$$$$"
   },
   "EXPRESSION": {
-    "ELEVEL1": (EXPR_inherit, EXPR_synth)
+    "ELEVEL1": (EXPR_inherit, EXPR_bool_synth)
   },
   "EXPRESSIONX": {
-    "or": "$$$$",
+    "or": (EXPR_inherit, EXPRX_synth),
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL1": {
-    "ELEVEL2": "$$$$"
+    "ELEVEL2":(EXPR_inherit, EXPR_bool_synth)
   },
   "ELEVEL1X": {
-    "&&": "$$$$",
+    "and":(EXPR_inherit, EXPRX_synth),
     "epsilon":(None, synth_code_epsilon)
   },
   "ELEVEL2": {

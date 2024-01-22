@@ -216,7 +216,7 @@ class TokenType(Enum):
             case TokenType.FLOAT:
                 return "float"
             case TokenType.AND:
-                return "&&"
+                return "and"
             case TokenType.ELSE:
                 return "else"
             case TokenType.FALSE:

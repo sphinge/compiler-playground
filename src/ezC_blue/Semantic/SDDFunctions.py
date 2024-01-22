@@ -195,10 +195,10 @@ def pass_on_TF_to_first_child(node):
 def EXPR_inherit(node):
     pass_on_TF_to_first_child(node)
     
-def EXPR_synth(node):
+def EXPR_bool_synth(node):
     elevel1 = node.children[0]
     exprx = node.children[1]
-    
+    operand = exprx.operand
     # type checking
     if exprx.type==None:
         node.type= elevel1.type
@@ -212,9 +212,40 @@ def EXPR_synth(node):
         pass
     elif node.true_label:
         pass
-    elif exprx.code:
+    if exprx.code:
         node.res= Temp("bool")
-        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} || {exprx.code};'
+        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} {operand} {exprx.code};'
     else:
         node.res= elevel1.res
         node.code= f'{elevel1.code}'
+        
+def EXPR_number_synth(node):
+    elevel1 = node.children[0]
+    exprx = node.children[1]
+    operand = exprx.operand
+    # type checking
+    if exprx.type==None:
+        node.type= elevel1.type
+    elif exprx.type!= elevel1.type:
+        print("TYPE ERROR")
+        node.type= None
+    else:
+        node.type= elevel1.type
+
+    if node.true_label and exprx.code:
+        pass
+    elif node.true_label:
+        pass
+    if exprx.code:
+        node.res= Temp(elevel1.type)
+        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} {operand} {exprx.code};'
+    else:
+        node.res= elevel1.res
+        node.code= f'{elevel1.code}'
+        
+def EXPRX_synth(node):
+    node.operand= node.children[0]
+    expr = node.children[1]
+    
+    node.res = expr.res
+    node.code = expr.code

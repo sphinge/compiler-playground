@@ -51,7 +51,8 @@ class Parser:
             raise Exception(f"EXPECTED: {token}, GOT:{lookahead}")
         
         production = self.ParsingTable.get_table_entry(token[0], lookahead[0])
-
+        if self.stack[0][0]=="ELEVEL5X":
+            pass
         if production == []:
             self.tree.print()
             raise Exception(f"EXPECTED: {token}, GOT:{lookahead}")
