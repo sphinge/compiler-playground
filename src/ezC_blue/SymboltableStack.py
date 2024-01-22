@@ -4,8 +4,8 @@ class SymboltableStackItem:
         self.parent = parent # Symbol table of outer scope
         self.previous = previous
 
-    def add(self, symbol, value):
-        self.table[symbol] = value
+    def add(self, symbol, value, type):
+        self.table[symbol] = {"value":value, "type":type}
 
 class SymboltableStack:
     def __init__(self):
@@ -16,12 +16,12 @@ class SymboltableStack:
         newSymbolTable = SymboltableStackItem(parent= self.head, previous= self.head)
         self.head = newSymbolTable
 
-    def pushNewTableOnGolbalContext(self):
+    def pushNewTableOnGlobalContext(self):
         newSymbolTable = SymboltableStackItem(parent= self.globalTable, previous= self.head)
         self.head = newSymbolTable
 
-    def addSymbolToCurrentContext(self, symbol, value):
-        self.head.add(symbol, value)
+    def addSymbolToCurrentContext(self, symbol, value, type):
+        self.head.add(symbol, value, type)
 
     def popHead(self):
         self.head = self.head.previous

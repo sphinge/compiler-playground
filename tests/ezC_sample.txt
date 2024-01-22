@@ -1,5 +1,5 @@
 string d = "hello";
-string Y = "HELLP";
+string y = "HELLP";
 if (2==30){
     print d;
 }

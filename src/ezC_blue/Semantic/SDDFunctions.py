@@ -9,6 +9,13 @@ I think the functions should only take one node as input. This node is defined i
 """
 
 from Lexing.TokenTypes import TokenType
+from SymboltableStack import SymboltableStack
+
+#--------------------
+# SYMBOL TABLE
+symbolTable= SymboltableStack()
+# SYMBOL TABLE
+#--------------------
 
 #-------------------------
 # LABELS
@@ -114,9 +121,8 @@ def ASSIGNMENT_synth(node):
 
     # SYNTH CODE
     node.code = f"{node.children[3].code} {node.children[0].code} {node.children[1].lexval} = {node.children[3].res}; "
-    
-    # TODO:SYMBOL TABLE UPDATE
-    #node.symbol_table.add?
+
+    symbolTable.addSymbolToCurrentContext(node.children[1].lexval, None, expected_type)    #node.symbol_table.add?
     
 def EXPRSTMT_synth(node):
     node.type = node.children[0].type
@@ -303,15 +309,18 @@ def EXPR_identifier_synth(node):
 def VARORCALL_synth(node):
     identifier = node.children[0]
     variablename= identifier.lexval
+    tableEntry= symbolTable.get(variablename)
+    if not tableEntry:
+        print("UNDEFINED ERROR")
+    else: 
+        node.type= tableEntry["type"]
     
     funcallx= node.children[1]
     if (funcallx.code)=="":
         node.res = {"name":variablename}
         node.code = ""
-        node.type = f"symboltable.lookup {variablename}"
     else: # THIS MEANS ITS A FUNCTION
         arguments= node.children[2]
-        node.type = f"symboltable.lookup {variablename}"
         node.res= Temp(node.type)
         node.code= f"""{node.res} = {variablename}{arguments.code}; \n"""
         
