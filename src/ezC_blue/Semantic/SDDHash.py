@@ -113,39 +113,39 @@ SDDHash = {
     "epsilon":(None, synth_code_epsilon)
   },
   "ELEVEL2": {
-    "ELEVEL3": (None, synth_code_epsilon)
+    "ELEVEL3":  (EXPR_inherit, EXPR_bool_synth)
   },
   "ELEVEL2X": {
-    "==": "$$$$",
+    "==": (EXPR_inherit, EXPRX_synth),
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL3": {
-    "ELEVEL4": "$$$$"
+    "ELEVEL4":  (EXPR_inherit, EXPR_number_synth)
   },
   "ELEVEL3X": {
     "COMPOPERATORS": "$$$$",
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL4": {
-    "ELEVEL5": "$$$$"
+    "ELEVEL5":  (EXPR_inherit, EXPR_number_synth)
   },
   "ELEVEL4X": {
-    "+": "$$$$",
-    "-": "$$$$",
+    "+": (EXPR_inherit, EXPRX_synth),
+    "-": (EXPR_inherit, EXPRX_synth),
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL5": {
     "ELEVEL6": "$$$$"
   },
   "ELEVEL5X": {
-    "/": "$$$$",
-    "*": "$$$$",
+    "/": (EXPR_inherit, EXPRX_synth),
+    "*": (EXPR_inherit, EXPRX_synth),
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL6": {
     "!": "$$$$",
     "-": "$$$$",
-    "ELEVEL6X": (None, synth_code_epsilon)
+    "ELEVEL6X": "$$$$"
   },
   "ELEVEL6X": {
     "PRIMARY": "$$$$",

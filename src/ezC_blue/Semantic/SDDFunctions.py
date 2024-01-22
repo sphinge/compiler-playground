@@ -214,7 +214,7 @@ def EXPR_bool_synth(node):
         pass
     if exprx.code:
         node.res= Temp("bool")
-        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} {operand} {exprx.code};'
+        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} {operand} {exprx.res};'
     else:
         node.res= elevel1.res
         node.code= f'{elevel1.code}'
