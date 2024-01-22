@@ -164,7 +164,7 @@ SDDHash = {
     "identifier": (EXPR_inherit, VARORCALL_synth)
   },
   "FUNCCALLX": {
-    "(": "$$$$",
+    "(": (None, FUNCX_synth),
     "epsilon": (None, synth_code_epsilon)
   },
   "COMPOPERATORS": {
