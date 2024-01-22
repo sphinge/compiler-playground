@@ -2,7 +2,7 @@
 
 run:
 	@. venv/bin/activate && \
-	python3 src/main.py assets/sample.txt
+	python3 -m ezC_blue.compiler
 
 test:
 	@. venv/bin/activate && \

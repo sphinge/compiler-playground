@@ -1,5 +1,5 @@
-from src.Parsing.Tree import Tree_Wrapper
-from src.Lexing.TokenTypes import TokenType
+from ezC_blue.Parsing.Tree import Tree_Wrapper
+from ezC_blue.Lexing.TokenTypes import TokenType
 
 class Parser:
     def __init__(self, tokenstrem, table):
@@ -72,9 +72,9 @@ class Parser:
 
 
 if __name__=="__main__":
-    from Parsing.ParsingTable import ParsingTable
-    from src.Lexing.grammarHash import grammarHash
-    from src.Lexing.Lexer import Lexer
+    from ezC_blue.Parsing.ParsingTable import ParsingTable
+    from ezC_blue.Lexing.grammarHash import grammarHash
+    from ezC_blue.Lexing.Lexer import Lexer
     l = Lexer("ezctest.txt")
     l.generateTokens()
 

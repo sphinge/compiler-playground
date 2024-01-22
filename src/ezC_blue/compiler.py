@@ -1,9 +1,9 @@
-from src.Lexing.Lexer import Lexer
-from SymboltableStack import SymboltableStack
-from Parsing.ParsingTable import ParsingTable
-from src.Lexing.grammarHash import grammarHash
-from src.Parsing.Parser import Parser
 import sys
+from ezC_blue.Lexing.Lexer import Lexer
+from ezC_blue.Lexing.grammarHash import grammarHash
+from ezC_blue.Parsing.ParsingTable import ParsingTable
+from ezC_blue.Parsing.Parser import Parser
+from ezC_blue.SymboltableStack import SymboltableStack
 
 class Compiler:
 
@@ -13,7 +13,7 @@ class Compiler:
         if len(sys.argv)>1:
             ezcFilePath = sys.argv[1]
         else:
-            ezcFilePath="src/ezctest.txt"
+            ezcFilePath="tests/ezC_sample.txt"
             
         lexer = Lexer(ezcFilePath)
         lexer.generateTokens()
