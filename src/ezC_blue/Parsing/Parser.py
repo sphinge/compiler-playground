@@ -20,7 +20,7 @@ class Parser:
         if self.stack == []:
             print("DONE!")
             print(self.stack)
-            self.tree.print()
+            #self.tree.print()
         else: 
             print(self.stack)
             print("Parsing Failed")

@@ -75,7 +75,7 @@ SDDHash = {
     "while": (WHILESTMT_inherit, WHILESTMT_synth)
   },
   "RETURNSTMT": {
-    "return": "$$$$"
+    "return": (RETSTMT_inherit, RETSTMT_synth)
   },
   "BLOCK": {
     "{": "$$$$"
@@ -92,11 +92,11 @@ SDDHash = {
     ",": "$$$$"
   },
   "ARGUMENTS": {
-    "EXPRESSION": "$$$$"
+    "EXPRESSION": (None, ARGS_synth)
   },
   "ARGUMENTSX": {
-    ",": "$$$$",
-    "epsilon": "$$$$"
+    ",": (None, ARGSX_synth),
+    "epsilon": (None, synth_code_epsilon)
   },
   "EXPRESSION": {
     "ELEVEL1": (EXPR_inherit, EXPR_bool_highest_add_gotos)
@@ -123,7 +123,7 @@ SDDHash = {
     "ELEVEL4":  (EXPR_inherit, EXPR_bool_synth)
   },
   "ELEVEL3X": {
-    "COMPOPERATORS": "$$$$",
+    "COMPOPERATORS": (None,EXPRX3_synth),
     "epsilon": (None, synth_code_epsilon)
   },
   "ELEVEL4": {
@@ -168,10 +168,10 @@ SDDHash = {
     "epsilon": (None, synth_code_epsilon)
   },
   "COMPOPERATORS": {
-    "<=": "$$$$",
-    "<": "$$$$",
-    ">": "$$$$",
-    ">=": "$$$$",
-    "!=": "$$$$"
+    "<=": (None,COMPOP_synth),
+    "<": (None,COMPOP_synth),
+    ">": (None,COMPOP_synth),
+    ">=": (None,COMPOP_synth),
+    "!=": (None,COMPOP_synth),
   }
 }

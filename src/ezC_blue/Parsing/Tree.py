@@ -45,10 +45,17 @@ class Tree_Wrapper():
 
         return self.root.search(ID)
 
-    def print(self):
+    def print(self, DEBUG=False):
         for i, node in enumerate(self.nodes):
             print(f"Printing Tree ... Creating Node {i} of {self.size}")
-            self.dot.add_node(pydot.Node(str(node.ID), label = f"{node.label}: {node.lexval}"))
+            if node.lexval:
+                label= f"{node.label}: {node.lexval}"
+            else:
+                label= node.label
+
+            if DEBUG and node.code:
+                label += "\n"+ node.code
+            self.dot.add_node(pydot.Node(str(node.ID), label = label))
 
         
         for i, j in (self.edges):
