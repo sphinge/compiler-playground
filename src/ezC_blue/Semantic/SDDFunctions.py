@@ -176,7 +176,11 @@ def WHILESTMT_inherit(node):
 def WHILESTMT_synth(node):
     expression = node.children[2]
     statement = node.children[5]
-    node.code= f"{node.managed_labels['start']['code']} {expression.code} {node.managed_labels['True']['code']} {statement.code} \n goto {node.managed_labels['start']['name']}"
+    node.code= f"""{node.managed_labels['start']['code']} 
+    {expression.code} 
+{node.managed_labels['True']['code']} 
+    {statement.code}
+    goto {node.managed_labels['start']['name']}"""
     
 def PRINTSTMT_inherit(node):
     expression= node.children[1]
