@@ -148,8 +148,6 @@ def IFSTMT_synth(node):
     ifstmtx = node.children[7]
     node.code = f"""
 {expression.code} 
-if ({expression.res['name']}) goto {node.managed_labels['True']['name']};
-if !({expression.res['name']}) goto {node.managed_labels['False']['name']};
 {node.managed_labels['True']['code']}
     {statement1.code} 
 {node.managed_labels['False']['code']} 
@@ -213,6 +211,13 @@ def EXPR_inherit(node):
         if node.false_label:
             child.false_label= node.false_label
     
+def EXPR_bool_highest_add_gotos(node):
+    EXPR_bool_synth(node)
+    if node.true_label and node.false_label:
+        node.code+= f"""
+    if ({node.res['name']}) goto {node.true_label["name"]};
+    if !({node.res['name']}) goto {node.false_label["name"]};"""
+
 def EXPR_bool_synth(node):
     elevel1 = node.children[0]
     exprx = node.children[1]

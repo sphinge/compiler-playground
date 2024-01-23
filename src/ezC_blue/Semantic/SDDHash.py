@@ -99,7 +99,7 @@ SDDHash = {
     "epsilon": "$$$$"
   },
   "EXPRESSION": {
-    "ELEVEL1": (EXPR_inherit, EXPR_bool_synth)
+    "ELEVEL1": (EXPR_inherit, EXPR_bool_highest_add_gotos)
   },
   "EXPRESSIONX": {
     "or": (EXPR_inherit, EXPRX_synth),
