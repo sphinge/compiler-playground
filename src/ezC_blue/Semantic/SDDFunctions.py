@@ -360,9 +360,7 @@ def VARORCALL_synth(node):
         node.code = ""
     else: # THIS MEANS ITS A FUNCTION
         node.res= Temp(node.type)
-        node.code= f""" 
-        {funcallx.code}
-        {node.res} = {variablename}{funcallx.res}; \n"""
+        node.code= f"""{funcallx.code}    {node.res["code"]} = {variablename}{funcallx.res}; \n"""
         
 def FUNCX_synth(node):
     arguments= node.children[1]
@@ -375,15 +373,11 @@ def COMPOP_synth(node):
 def ARGS_synth(node):
     expression= node.children[0]
     argsX= node.children[1]
-    node.code= f"""
-    {expression.code}
-    {argsX.code}"""
-    node.res= f"{expression.res} {argsX.code}"
+    node.code= f"""{expression.code}{argsX.code}"""
+    node.res= f"{expression.res['name']}{argsX.code}"
 
 def ARGSX_synth(node):
     expression= node.children[0]
     argsX= node.children[1]
-    node.code= f"""
-    {expression.code}
-    {argsX.code}"""
-    node.res= f",{expression.res} {argsX.code}"
+    node.code= f"""{expression.code}{argsX.code}"""
+    node.res= f",{expression.res['name']} {argsX.code}"

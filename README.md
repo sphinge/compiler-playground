@@ -235,6 +235,12 @@ The parsing-table is stored in a two-dimensional hashtable.
 ## Parser
 The parsers works with an input-string, a stack, and the generated parsing-table, as shown in the lecture.
 
+## Contributions to IR Generation
+- Some Refactoring/Fixes:
+
+- Implementation:
+Peter
+
 ## Contributions
 - **Project Management:**
 Alexander
@@ -251,3 +257,4 @@ Nikolas, Felix (refactoring)
 Nikolas, Peter
 - **Writing tests:**
 Felix, Friederike
+

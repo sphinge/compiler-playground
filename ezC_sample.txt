@@ -8,3 +8,4 @@ while (5000==12){
 }
 bool z = 9<10;
 print "EXECUTING";
+int x= test(z);

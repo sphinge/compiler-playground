@@ -16,7 +16,7 @@ class ParsingTable:
         self.initParseTable()
         self.initSets()
         self.generateSets()
-        self.printSets()
+        #self.printSets()
 
     def get_table_entry(self, NonTerminal:str, token:TokenType):
         production=[]

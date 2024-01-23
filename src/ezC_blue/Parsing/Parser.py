@@ -18,8 +18,9 @@ class Parser:
             self.parse_step()
 
         if self.stack == []:
-            print("DONE!")
-            print(self.stack)
+            pass
+            #print("DONE!")
+            #print(self.stack)
             #self.tree.print()
         else: 
             print(self.stack)
@@ -42,8 +43,8 @@ class Parser:
                 Node=self.tree.find(token[1])
                 Node.lexval= lookahead[1]
 
-            print("matched: ")
-            print(token)
+            #print("matched: ")
+            #print(token)
             return
         
         elif type(token[0])==TokenType:

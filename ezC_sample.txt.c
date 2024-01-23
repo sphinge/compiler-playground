@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "test.c"
+
 int main() {
 
  
@@ -36,6 +38,10 @@ int main() {
     bool z = t2; 
  next13:  next15: printf("%s", "EXECUTING");
  next14:
+    int t3 = test(z); 
+ 
+    int x = t3; 
+ next16:
  next0:
 }
 #endif // CUSTOM_STDIO_H

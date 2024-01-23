@@ -7,6 +7,11 @@ class SymboltableStackItem:
     def add(self, symbol, value, type):
         self.table[symbol] = {"value":value, "type":type}
 
+    def print(self):
+        if self.parent:
+            self.parent.print()
+        print(self.table)
+        
 class SymboltableStack:
     def __init__(self):
         self.globalTable = SymboltableStackItem(None, None)
@@ -37,3 +42,6 @@ class SymboltableStack:
                 chainElement = chainElement.parent
 
         return chainElement.table[key] # None if id not contained in any symbol table
+
+    def print(self):
+        self.head.print()
