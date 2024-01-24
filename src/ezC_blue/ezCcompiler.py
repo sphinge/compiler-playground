@@ -1,6 +1,6 @@
 import sys
 import re
-
+#print(sys.path[0])
 from Lexing.Lexer import Lexer
 from Lexing.grammarHash import grammarHash
 from Parsing.ParsingTable import ParsingTable
@@ -9,7 +9,7 @@ from SymboltableStack import SymboltableStack
 from Semantic.SDDFunctions import symbolTable
 
 DEBUG=False
-
+DEBUG2= True
 C_BOILERPLATE="""
 #ifndef CUSTOM_STDIO_H
 #define CUSTOM_STDIO_H
@@ -32,26 +32,22 @@ class Compiler:
     def main():
         global C_BOILERPLATE, DEBUG
         # TODO: handle wrong inputs
-        if len(sys.argv)>1:
-            inputFilePath = sys.argv[1]
+        inputFilePath="input.ezC"
+        outputFilePath = "out.c"
+        #print(sys.argv)
+        if len(sys.argv) >1:
+            c_import_file_name=f'#include "{sys.argv[1]}"'
         else:
-            inputFilePath="ezC_sample.txt"
-        
-        if len(sys.argv)>2:
-            outputFilePath = sys.argv[2]
-        else:
-            outputFilePath = f"{inputFilePath}.c"
+            c_import_file_name = ""
+        #print(c_import_file_name)
+                    
+        if c_import_file_name != "":
+            with open(sys.argv[1], "r")as extra_file:
+                string=extra_file.read()
+                #print(string)
+                Compiler.put_functions_into_SymbolTable(string)
 
-        if len(sys.argv)>3:
-            c_import_file_name= sys.argv[3]
-        else:
-            c_import_file_name="test.c"
-        
-        with open(c_import_file_name, "r")as extra_file:
-            string=extra_file.read()
-            Compiler.put_functions_into_SymbolTable(string)
-
-        C_BOILERPLATE=C_BOILERPLATE.replace("$import$", f'#include "{c_import_file_name}"')
+        C_BOILERPLATE=C_BOILERPLATE.replace("$import$", c_import_file_name)
         
 
         lexer = Lexer(inputFilePath)
@@ -72,7 +68,8 @@ class Compiler:
         program= parse_tree.execute_IRGeneration()
         with open(outputFilePath, "w") as output:
             output.write(C_BOILERPLATE.replace("$input$", program))
-
+        
+        print(C_BOILERPLATE)
         if DEBUG:            
             parse_tree.print(DEBUG)
 

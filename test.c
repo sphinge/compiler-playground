@@ -2,6 +2,6 @@
 //$ezC:test->int$
 int test(int x){
     int y = x*x;
-    printf("%d",y);
+    printf("C FUNCTION %d",y);
     return x*x;
 }
