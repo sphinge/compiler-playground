@@ -1,25 +1,39 @@
-from Parser.grammarHash import grammarHash
-from TokenTypes import TokenType
+from Lexing.grammarHash import grammarHash
+from Lexing.TokenTypes import TokenType
 
 class ParsingTable:
     def __init__(self, grammarHashTable, separatorSymbol = '|', endSymbol = 'eof', startSymbol = None, epsilon = 'epsilon'):
-        self.parseTable = {}
-        self.FIRST = {}
-        self.FOLLOW = {}
-        
-        self.grammar = grammarHashTable
-        self.nonTerminals = list(self.grammar.keys())
-
+        self.parseTable      = {}
+        self.FIRST           = {}
+        self.FOLLOW          = {}
+        self.grammar         = grammarHashTable
+        self.nonTerminals    = list(self.grammar.keys())
         self.separatorSymbol = separatorSymbol
-        self.endSymbol = endSymbol
-        self.startSymbol = startSymbol if startSymbol != None else self.nonTerminals[0]
-        self.epsilon = epsilon
+        self.endSymbol       = endSymbol
+        self.startSymbol     = startSymbol if startSymbol != None else self.nonTerminals[0]
+        self.epsilon         = epsilon
 
         self.initParseTable()
         self.initSets()
-
         self.generateSets()
-        self.printSets()
+        #self.printSets()
+
+    def get_table_entry(self, NonTerminal:str, token:TokenType):
+        production=[]
+        token_string=TokenType.token_type_to_string(token)
+        try:
+            entry= self.parseTable[NonTerminal][token_string.lower()]
+        except: 
+            return []
+        for word in entry.split(" "):
+            token= TokenType.string_to_token_type(word.upper())
+            if not token:  
+                # Couldnt match token type, therefore its a NonTerminal
+                production.append(word)
+            else:
+                # Could match tokentype, therefore its a terminal
+                production.append(token)
+        return production            # Could match tokentype, therefore its a terminal
 
     def initParseTable(self):
         for nonTerminal in self.nonTerminals:
@@ -57,7 +71,6 @@ class ParsingTable:
                         except:
                             self.parseTable[nonTerminal][terminal] = production
                 
-
 
     def generateSets(self):
         for nonTerminal in self.nonTerminals:
@@ -161,28 +174,9 @@ class ParsingTable:
                 print("    " + key + ": " + self.parseTable[nonTerminal][key])
 
 
-    def get_table_entry(self, NonTerminal:str, token:TokenType):
-        production=[]
-        token_string=TokenType.token_type_to_string(token)
-        try:
-            entry= self.parseTable[NonTerminal][token_string.lower()]
-        except: 
-            return []
-        for word in entry.split(" "):
-            token= TokenType.string_to_token_type(word.upper())
-            if not token:  
-                # Couldnt match token type, therefore its a NonTerminal
-                production.append(word)
-            else:
-                # Could match tokentype, therefore its a terminal
-                production.append(token)
-        return production            # Could match tokentype, therefore its a terminal
-
-
-
 #----TEST----#
     
-if __name__=="__main__":
+if __name__ == "__main__":
     parseTable = ParsingTable(grammarHash)
     parseTable.constructParseTable()
     parseTable.printTable()

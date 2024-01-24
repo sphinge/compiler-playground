@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Check if exactly two or three arguments are provided
+if [ "$#" -ne 2 ] && [ "$#" -ne 3 ]; then
+    echo "Usage: $0 <input> <output> [c-linkage input]"
+    exit 1
+fi
+
+# Assigning arguments to variables for clarity
+input=$1
+output=$2
+clink=$3
+
+# Destination directory
+destination=$(dirname "$0")
+
+# Copying the files to the destination
+cp "$input" "$destination/input.ezC"
+
+# Check if the third argument is provided
+cp "$clink" "$destination"/"$clink"
+
+echo "compiling ezC file"
+# Assuming ezCcompiler.py is a script that needs to be executede
+cd "$destination"
+venv/bin/python "src/ezC_blue/ezCcompiler.py" "$clink"
+
+echo "done"
+# Result file to copy
+result="$destination/out.c"
+# Copying the Result file to the location of the output file
+cp "$result" "$PWD/$(basename "$output").c"
+
+echo "compiling result c file"
+gcc ""$output".c" -o test
+
+
+
+echo "done"
+
+echo "clean up"
+#rm "$destination/clink.c"
+
+echo rm "$destination/input.ezC"
+echo "done"
+

@@ -1,0 +1,11 @@
+string d = "hello";
+string y = "HELLP";
+if (2==30){
+    print d;
+}
+while (5000==12){
+    print y;
+}
+bool z = 9<10;
+print "EXECUTING";
+int x= test(z);
