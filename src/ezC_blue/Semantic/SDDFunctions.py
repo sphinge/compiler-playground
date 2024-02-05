@@ -99,7 +99,7 @@ def TYPE_synth_expected_type_and_width(node):
         case TokenType.TYPE_FLOAT:
             node.type= "float"
             node.width= 32
-        case TokenType.TYPE_STR:  # in case of string we do not have any possible array
+        case TokenType.TYPE_STR:
             node.type= "string"
             node.width= None
         case TokenType.TYPE_BOOL:
@@ -128,8 +128,8 @@ def ASSIGNMENT_synth(node):
         node.type = actual_type
     symbolTable.addSymbolToCurrentContext(node.children[1].lexval, None, expected_type)    #node.symbol_table.add?
 
-    if node.children[0].code == "string":
-        node.children[0].code = "char"
+    if node.children[0].code == ["string"]:
+        node.children[0].code = ["char"]
         node.children[1].lexval+="[]"
     # SYNTH CODE
     node.code = node.children[3].code + node.children[0].code + [f'{node.children[1].lexval} = {node.children[3].res["name"]};']

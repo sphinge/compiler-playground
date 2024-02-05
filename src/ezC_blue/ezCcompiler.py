@@ -9,7 +9,6 @@ from SymboltableStack import SymboltableStack
 from Semantic.SDDFunctions import symbolTable
 
 DEBUG=True
-DEBUG2= True
 C_BOILERPLATE="""
 #ifndef CUSTOM_STDIO_H
 #define CUSTOM_STDIO_H
@@ -30,9 +29,11 @@ class Compiler:
     def main():
         global C_BOILERPLATE, DEBUG
         # TODO: handle wrong inputs
-        inputFilePath="input.ezC"
-        outputFilePath = "out.c"        
-
+        if len(sys.argv) < 3:
+            print("USAGE: python compiler.py Path/to/ezCscript.ezC Path/to/Coutput.c")
+            return 1
+        inputFilePath = sys.argv[1]
+        outputFilePath= sys.argv[2]
         lexer = Lexer(inputFilePath)
         lexer.generateTokens()
         if DEBUG:
@@ -62,7 +63,7 @@ class Compiler:
         with open(outputFilePath, "w") as output:
             output.write(C_BOILERPLATE.replace("$input$",programString))
         
-        if not DEBUG:            
+        if DEBUG:            
             parse_tree.print(DEBUG)
 
 

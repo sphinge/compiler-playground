@@ -54,7 +54,7 @@ class Tree_Wrapper():
                 label= node.label
 
             if DEBUG and node.code:
-                label += "\n"+ node.code
+                label += "\n"+ str(node.code)
             self.dot.add_node(pydot.Node(str(node.ID), label = label))
 
         
