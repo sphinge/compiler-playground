@@ -1,0 +1,25 @@
+print "Start of the ezC program \n";
+
+int i = 0+0;
+
+while (i ==0){
+print "I is zero \n";
+
+}
+
+if (i!=0){
+print"I is not zero \n";
+}
+else {
+    print "I zero";
+}
+
+print "no loop \n";
+
+
+print "calling c function\n";
+int r = 0+0;
+print "Exiting program \n";
+return r;
+
+

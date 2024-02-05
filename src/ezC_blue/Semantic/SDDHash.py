@@ -65,7 +65,7 @@ SDDHash = {
     "if": (IFSTMT_inherit, IFSTMT_synth)
   },
   "IFSTMTX": {
-    "else": (inherit_next_to_last_child, synth_code_from_last_child),
+    "else": (inherit_next_to_last_child, IFSTMTX_synth),
     "epsilon": (None, synth_code_epsilon)
   },
   "PRINTSTMT": {
