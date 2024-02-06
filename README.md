@@ -235,6 +235,13 @@ The parsing-table is stored in a two-dimensional hashtable.
 ## Parser
 The parsers works with an input-string, a stack, and the generated parsing-table, as shown in the lecture.
 
+## intermediate representation
+
+The IR is 3AC-like C.
+We use the parse tree to calculate synthesized and inherited attributes of each production.
+For this we have functions that represent Syntax directed definitions. (SDDfunctions.py)
+For more detailed info, see Issue ezc/bluecompiler#15
+
 ## Contributions
 - **Project Management:**
 Alexander
@@ -249,7 +256,7 @@ Peter
 Nikolas, Felix (refactoring)
 - **Implementation of Parser:**
 Martin, Wiktoria, Nikolas, Peter
-- **Intermediate Representation Genertion**
+- **Intermediate Representation Generation**
 Peter
 - **Optimization**
 Martin, Wiktoria
