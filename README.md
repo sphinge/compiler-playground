@@ -254,7 +254,9 @@ Peter
 - **Implementation of Lexical Analyzer:**
 Nikolas, Felix (refactoring)
 - **Implementation of Parser:**
-Nikolas, Peter
+Martin, Wiktoria, Nikolas, Peter
+- **Optimization**
+Martin, Wiktoria
 - **Writing tests:**
 Felix, Friederike
 
