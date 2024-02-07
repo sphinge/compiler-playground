@@ -187,9 +187,9 @@ def IFSTMT_inherit(node):
     node.managed_labels["False"] = F
 
     true_next = node.next
-    node.children[5].next = true_next
+    node.children[4].next = true_next
 
-    node.children[7].next = node.next
+    node.children[5].next = node.next
 
 
 def IFSTMT_synth(node):
