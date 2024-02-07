@@ -33,12 +33,6 @@ class Tree_Wrapper():
         
         return self.size
 
-    def addToLatestNode(self, name):
-        if self.root == None:
-            self.addNode(name)
-        else:
-            self.addNode(name, self.size)
-
     def find(self, ID):
         if type(ID) != str:
             ID = str(ID)
@@ -153,6 +147,5 @@ if __name__ == "__main__":
     a.addNode("test3", 2)
 
     a.addNode("test4", 2)
-    a.addToLatestNode("LOL")
 
     a.print()
