@@ -10,7 +10,7 @@ The main programming language is **Python**.
 
 
 ## The ezC Language
-### 0. Specification
+### Specification
 ezC has basic functionality, including:\
 \
 **- Floating-Points:** `10.0`\
@@ -30,7 +30,7 @@ ezC has basic functionality, including:\
 
 ### Project:
 ## 1. basics and principles of lexical analysis (scanning):
-    - Description of the language to be lexemised 
+- Description of the language to be lexemised 
     A simple grammar in BNF notation is defined in the grammarHash.py file. The hash table represents the grammar rules of the language. 
     Example: The production "EXPRESSION" contains definitions of subordinate expressions such as "ELEVEL1" and "EXPRESSIONX"
     A valid ezC programme must follow the rules of the flying LL(1) grammar:
@@ -106,6 +106,7 @@ The Lexer class contains attributes, methods and a token recogniser.
     It reads characters until it encounters the closing inverted commas (") and adds them to a token.
     If no closing inverted commas are found or a new line is contained in the string
     an error message is displayed ("missing closing asterix").
+
 
 - Implementation of character classification and lexical token definition.
 
@@ -223,7 +224,7 @@ grammarHash = {
 The Parser.py file is used for error handling, e.g. triggering exceptions if an unexpected token or invalid production occurs.
 This code has a modular structure and contains the syntactic analysis of inputs in a specific format.
 
-    - Implementation of syntax rules and syntax analysis strategies
+- Implementation of syntax rules and syntax analysis strategies
 
 Functionality for the first and follow sets, and ultimately the parsing-table, are all constructed by the algorithms shown in the lecture.
 The parsing-table is stored in a two-dimensional hashtable and the Parser.py file is used for error handling, e.g. triggering exceptions if an unexpected token or invalid production occurs.
