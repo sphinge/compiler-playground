@@ -10,7 +10,7 @@ class Tree_Wrapper():
         self.nodes = []
         self.size  = 0
 
-    def addNode(self, name: str, parentID: int|None = None, literal: str|None = None, loc: (int,int)|None = None):
+    def addNode(self, name: str, parentID: int|None = None, literal: str|None = None, loc: tuple[int,int]|None = None):
         if parentID == None:
             self.size += 1
             self.root = Tree_Node(str(self.size), label = name)
