@@ -1,5 +1,5 @@
 # Compiler Project - Team Blue
-# Project goals
+
 This project is about developing a compiler that has the LL(1) grammar and can be applied to the **ezC** language.
 First, we build the front end of a compiler that contains a **lexical analyser**, a **syntactic analyser** and a **code generator** that is able to translate ezC into an intermediate representation (tbd). 
 
