@@ -1,5 +1,5 @@
-from lexer import Lexer
-from TokenTypes import TokenType
+from Lexing.Lexer import Lexer
+from Lexing.TokenTypes import TokenType
 
 
 def test_lexer():
@@ -12,34 +12,37 @@ var i <=23;
 var j =(i +1) * 2; // alksdjhfkj<<<=>//()
 """
     lexer = Lexer()
-    lexer.run(test_code)
+    lexer.generateTokens(test_code)
     tokens = lexer.tokenList
-    assert tokens == [
-        [TokenType.SEMICOLON.name, None],
-        [TokenType.NUMBER.name, 2.0],
-        [TokenType.SEMICOLON.name, None],
-        [TokenType.STRING.name, "asdffa"],
-        [TokenType.NUMBER.name, 32345.123],
-        [TokenType.LEFT_PAREN.name, None],
-        [TokenType.RIGHT_PAREN.name, None],
-        [TokenType.LEFT_BRACE.name, None],
-        [TokenType.RIGHT_BRACE.name, None],
-        [TokenType.SEMICOLON.name, None],
-        [TokenType.VAR.name, None],
-        [TokenType.IDENTIFIER.name, "i"],
-        [TokenType.LESS_EQUAL.name, None],
-        [TokenType.NUMBER.name, 23.0],
-        [TokenType.SEMICOLON.name, None],
-        [TokenType.VAR.name, None],
-        [TokenType.IDENTIFIER.name, "j"],
-        [TokenType.EQUAL.name, None],
-        [TokenType.LEFT_PAREN.name, None],
-        [TokenType.IDENTIFIER.name, "i"],
-        [TokenType.PLUS.name, None],
-        [TokenType.NUMBER.name, 1.0],
-        [TokenType.RIGHT_PAREN.name, None],
-        [TokenType.STAR.name, None],
-        [TokenType.NUMBER.name, 2.0],
-        [TokenType.SEMICOLON.name, None],
-        [TokenType.EOF.name, None],
+
+    simplified_tokens = [(tok_type, tok_value) for tok_type, tok_value, _ in tokens]
+
+    assert simplified_tokens == [
+        (TokenType.SEMICOLON, None),
+        (TokenType.INT, 2),
+        (TokenType.SEMICOLON, None),
+        (TokenType.STRING, "asdffa"),
+        (TokenType.FLOAT, 32345.123),
+        (TokenType.LEFT_PAREN, None),
+        (TokenType.RIGHT_PAREN, None),
+        (TokenType.LEFT_BRACE, None),
+        (TokenType.RIGHT_BRACE, None),
+        (TokenType.SEMICOLON, None),
+        (TokenType.VAR, None),
+        (TokenType.IDENTIFIER, "i"),
+        (TokenType.LESS_EQUAL, None),
+        (TokenType.INT, 23),
+        (TokenType.SEMICOLON, None),
+        (TokenType.VAR, None),
+        (TokenType.IDENTIFIER, "j"),
+        (TokenType.EQUAL, None),
+        (TokenType.LEFT_PAREN, None),
+        (TokenType.IDENTIFIER, "i"),
+        (TokenType.PLUS, None),
+        (TokenType.INT, 1),
+        (TokenType.RIGHT_PAREN, None),
+        (TokenType.STAR, None),
+        (TokenType.INT, 2),
+        (TokenType.SEMICOLON, None),
+        (TokenType.EOF, None),
     ]

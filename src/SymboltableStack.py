@@ -1,28 +1,33 @@
 class SymboltableStackItem:
     def __init__(self, parent, previous):
         self.table = {}
-        self.parent = parent # Symbol table of outer scope
+        self.parent = parent  # Symbol table of outer scope
         self.previous = previous
 
     def add(self, symbol, value, type):
-        self.table[symbol] = {"value":value, "type":type}
+        self.table[symbol] = {"value": value, "type": type}
 
     def print(self):
         if self.parent:
             self.parent.print()
         print(self.table)
-        
+
+
 class SymboltableStack:
+    head: SymboltableStackItem
+
     def __init__(self):
         self.globalTable = SymboltableStackItem(None, None)
         self.head = self.globalTable
 
     def pushNewTableOnCurrentContext(self):
-        newSymbolTable = SymboltableStackItem(parent= self.head, previous= self.head)
+        newSymbolTable = SymboltableStackItem(parent=self.head, previous=self.head)
         self.head = newSymbolTable
 
     def pushNewTableOnGlobalContext(self):
-        newSymbolTable = SymboltableStackItem(parent= self.globalTable, previous= self.head)
+        newSymbolTable = SymboltableStackItem(
+            parent=self.globalTable, previous=self.head
+        )
         self.head = newSymbolTable
 
     def addSymbolToCurrentContext(self, symbol, value, type):
@@ -30,7 +35,7 @@ class SymboltableStack:
 
     def popHead(self):
         self.head = self.head.previous
-        #old 'self.head' is garbage-collected
+        # old 'self.head' is garbage-collected
 
     def get(self, key):
         chainElement = self.head
@@ -41,7 +46,7 @@ class SymboltableStack:
             else:
                 chainElement = chainElement.parent
 
-        return chainElement.table[key] # None if id not contained in any symbol table
+        return chainElement.table[key]  # None if id not contained in any symbol table
 
     def print(self):
         self.head.print()

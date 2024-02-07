@@ -1,0 +1,17 @@
+print "Start of the ezC program \n";
+
+int limit = 10000;
+int a = 0;
+int b = 0;
+int c = 1;
+while(a < limit){
+    print a;
+    int a = b;
+    int b = c;
+    int c = a + b;
+}
+
+int r = 0;
+return r;
+
+
