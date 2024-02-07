@@ -16,6 +16,13 @@ setup:
 	pip install -r requirements.txt
 	@echo "\033[1;32m### bluecompiler ###\033[0m \t \033[32mSetup complete (dependencies from requirements.txt installed)\033[0m" 
 
+init:
+	@echo "\033[1;34m### bluecompiler ###\033[0m \t \033[34mSetting up project with Python virtual environment\033[0m"
+	@python3 -m venv venv
+	@. venv/bin/activate && \
+	pip install -r requirements.txt
+	@echo "\033[1;32m### bluecompiler ###\033[0m \t \033[32mSetup complete (dependencies from requirements.txt installed)\033[0m" 
+
 freeze:
 	@. venv/bin/activate && \
 	pip freeze > requirements.txt
