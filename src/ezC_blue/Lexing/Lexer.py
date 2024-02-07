@@ -32,11 +32,13 @@ class Lexer:
         self.lexemeBegin  = 0
         self.forward      = 0
         self.currentLine  = ""
+        self.lineNumber   = 0
 
     def generateTokens(self):
         file = open(self.filePath, 'r')
         while True:
             self.currentLine = file.readline()
+            self.lineNumber += 1
             if self.currentLine == "": break
             self.scanTokens()
             self.resetScanner()
@@ -69,7 +71,7 @@ class Lexer:
             return "" # no lookahead possible if forward reached last character of currentLine
         
     def consumeToken(self, type, literal = None):
-        self.tokenList.append([type, literal])
+        self.tokenList.append([type, literal, (self.lineNumber,self.lexemeBegin)])
         self.moveToNextLexeme()
 
     def isDigit(self, char):
