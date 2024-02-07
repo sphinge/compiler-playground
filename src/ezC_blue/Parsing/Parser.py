@@ -24,7 +24,8 @@ class Parser:
             #self.tree.print()
         else: 
             print(self.stack)
-            print("Parsing Failed")
+            last_input = self.input[0][2]
+            print(f"Parsing Failed. (line {last_input[0]},{last_input[1]})")
 
     def parse_step(self):
         lookahead = self.input[0]
@@ -39,9 +40,10 @@ class Parser:
             self.input.pop(0)
 
              # If we have a literal value attached to the Token, append it to the respectiveNode
+            node=self.tree.find(token[1])
+            node.loc = lookahead[2]
             if lookahead[1]!=None: 
-                Node=self.tree.find(token[1])
-                Node.lexval= lookahead[1]
+                node.lexval = lookahead[1]
 
             #print("matched: ")
             #print(token)
@@ -49,14 +51,18 @@ class Parser:
         
         elif type(token[0])==TokenType:
             self.tree.print()
-            raise Exception(f"EXPECTED: {token}, GOT:{lookahead}")
+            actual_token = lookahead[0:2]
+            loc = lookahead[2]
+            raise Exception(f"EXPECTED: {token}, GOT:{actual_token}. (line {loc[0]},{loc[1]})")
         
         production = self.ParsingTable.get_table_entry(token[0], lookahead[0])
         if self.stack[0][0]=="ELEVEL5X":
             pass
         if production == []:
             self.tree.print()
-            raise Exception(f"EXPECTED: {token}, GOT:{lookahead}")
+            actual_token = lookahead[0:2]
+            loc = lookahead[2]
+            raise Exception(f"EXPECTED: {token}, GOT:{actual_token}. (line {loc[0]},{loc[1]})")
         
         self.stack.pop(0)
         stack_acc = []

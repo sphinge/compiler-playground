@@ -67,9 +67,6 @@ def Temp(type):
 # TEMP VARIABLES
 #-------------------------------
 
-
-
-
 def inherit_next_2_children(node):
     l = Label("next")
     node.children[0].next = l
@@ -106,8 +103,8 @@ def TYPE_synth_expected_type_and_width(node):
             node.type= "bool"
             node.width= 16
         case __:
-            raise SyntaxError("EXPECTED TYPE SPECIFIER")
-        
+            raise Exception(f"EXPECTED TYPE SPECIFIER. (line {node.loc[0]},{node.loc[1]})")
+    
     node.code= [node.type]
     
 def TYPE_synth_type_from_Symbol_Table(node):
@@ -122,8 +119,7 @@ def ASSIGNMENT_synth(node):
     actual_type = node.children[3].type
 
     if expected_type != actual_type:
-        # TODO make Exception 
-        print(f"TYPING ERROR: type {expected_type} does not match {actual_type}")
+        raise Exception(f"TYPING ERROR: type {expected_type} does not match {actual_type}. (line {node.loc[0]},{node.loc[1]})")
     else:
         node.type = actual_type
     symbolTable.addSymbolToCurrentContext(node.children[1].lexval, None, expected_type)    #node.symbol_table.add?
@@ -218,7 +214,7 @@ def RETSTMT_synth(node):
     expression= node.children[1]
 
     if expression.type!="int":
-        raise Exception("TYPE ERROR: only return int")
+        raise Exception(f"TYPE ERROR: only return int. (line {node.loc[0]},{node.loc[1]})")
 
     node.code= expression.code + node.managed_labels["EXPR_next"].set() + [f'return {expression.res["name"]};']
     
@@ -242,7 +238,7 @@ def EXPR_bool_synth(node):
     if exprx.type==None:
         node.type= elevel1.type
     elif exprx.type!= elevel1.type:
-        print("TYPE ERROR")
+        raise Exception(f"TYPE ERROR. (line {node.loc[0]},{node.loc[1]})")
         node.type= None
     else:
         node.type= elevel1.type
@@ -263,7 +259,7 @@ def EXPR_number_synth(node):
     if exprx.type==None:
         node.type= elevel1.type
     elif exprx.type!= elevel1.type:
-        print("TYPE ERROR")
+        raise Exception(f"TYPE ERROR. (line {node.loc[0]},{node.loc[1]}")
         node.type= None
     else:
         node.type= elevel1.type
@@ -299,7 +295,7 @@ def EXPR_invert_synth(node):
     
     node.type = expr.type
     if node.type=="str":
-        print("TYPE ERROR")
+        raise Exception(f"TYPE ERROR. (line {node.loc[0]},{node.loc[1]}")
     
     node.res = Temp(node.type)
     node.code =[f'{expr.code} \n {node.res} = {operant_token} {expr.res}']
@@ -344,7 +340,7 @@ def VARORCALL_synth(node):
     variablename= identifier.lexval
     tableEntry= symbolTable.get(variablename)
     if not tableEntry:
-        print("UNDEFINED ERROR")
+        raise Exception(f"UNDEFINED ERROR. (line {node.loc[0]},{node.loc[1]}")
     else: 
         node.type= tableEntry["type"]
     
