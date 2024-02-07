@@ -43,7 +43,7 @@ class Lexer:
             self.scanTokens()
             self.resetScanner()
         
-        self.tokenList.append([TokenType.EOF, None])
+        self.tokenList.append([TokenType.EOF, None, (self.lineNumber,0)])
         file.close()
 
     def reachedEnd(self):
