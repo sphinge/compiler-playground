@@ -1,5 +1,5 @@
 # Compiler Project - Team Blue
-
+# Project 
 This project is about developing a compiler that has the LL(1) grammar and can be applied to the **ezC** language.
 First, we build the front end of a compiler that contains a **lexical analyser**, a **syntactic analyser** and a **code generator** that is able to translate ezC into an intermediate representation (tbd). 
 
@@ -237,24 +237,30 @@ The intermediate representation is is 3AC-like C.
 The syntactic analysis builds on the output of the lexical analysis and interprets the structure of the source code according to the grammar of the target language.
 A tree structure is generated which represents the hierarchical structure of the source code. We use the parse tree to calculate the synthesised and inherited attributes of each production. Here are functions that represent syntax directed definitions. (SDDfunctions.py)
 For more detailed information, see issue ezc/bluecompiler#15siehetree.py
+
+The parsing technique LL(1) ("Left-to-right, Leftmost derivation) ensures that the correct productions are selected based on the current and next token.
+
 The Nonrecursive Predictive Parser is a top-down parser that uses iterative methods and predictive analysis to process the productions of the grammar. 
 Based on loops and a stack to track the parsing decisions.
+
 The file create_blocks.py optimises the control flow by declaring the visibility of the variables in the blocks.
-The parsing technique LL(1) ("Left-to-right, Leftmost derivation) ensures that the correct productions are selected based on the current and next token.
+A C file is parsed and blocks of code with specific statements such as
+expression, goto, return, lib and label. 
+To define the statements, an enum.enum class, the block class and its connections are created as CFG. (Blocks are stored in block_list, entry is start_block)
+
+
+
 
 
 ## 4. Examples and test scenarios:
-
+Look for Test Code
 
 ## 5. Extension points and customisation options:
-    - Possibility to extend lexical and syntactic grammar 
-  (5)-> Improvement(lexer): Adapt specifications to language and case-sensitivity requirements. 
-
-    - Possibility to customise lexical and syntactic rules for different programming languages
-
-
-
-
+The language specifications and the requirements for upper and lower case can be customised.
+Further optimisation ideas: 
+> - Extend grammar
+> - suport for classes
+> - structs extension, i.e. language features so that the compiler is further supported.
 
 
 
