@@ -232,21 +232,21 @@ The intermediate representation is is 3AC-like C.
 
 
 
-## 3. architecture and modularity of lexer and parser:
+## 3. Architecture and modularity of lexer and parser:
 
-Die Syntaktische Analyse baut auf der Ausgabe der lexikalischen Analyse auf und interpretiert die Struktur des Quellcodes gemäß der Grammatik der Zielsprache.
-Es wird eine Baumstruktur erzeugt welche die hierarchische Struktur des Quellcodes darstellt. Wir verwenden den Parse-Baum, um die synthetisierten und vererbten Attribute jeder Produktion zu berechnen. Hier sind Funktionen, die Syntax gerichtete Definitionen darstellen. (SDDfunctions.py)
-Für detailliertere Informationen, siehe Issue ezc/bluecompiler#15siehetree.py
-Der Nonrecursive Predictive Parser ist ein Top-Down-Parser, der iterative Methoden verwendet und eine vorausschauende Analyse einsetzt, um die Produktionen der Grammatik zu verarbeiten. 
-Basierend auf Schleifen und einen Stack zur Nachverfolgung der Parsing-Entscheidungen.
-Die Datei create_blocks.py optimiert den Kontrollfluss indem die Sichtbarkeit der Variablen in den Blocken deklariert werden.
-Die Parsing-Technic LL(1) ("Left-to-right, Leftmost derivation) sorgt dafür, dass die richtigen Produktionen basierend auf dem aktuellen und nächsten Token ausgewählt wird.
-
-
-## 4. examples and test scenarios:
+The syntactic analysis builds on the output of the lexical analysis and interprets the structure of the source code according to the grammar of the target language.
+A tree structure is generated which represents the hierarchical structure of the source code. We use the parse tree to calculate the synthesised and inherited attributes of each production. Here are functions that represent syntax directed definitions. (SDDfunctions.py)
+For more detailed information, see issue ezc/bluecompiler#15siehetree.py
+The Nonrecursive Predictive Parser is a top-down parser that uses iterative methods and predictive analysis to process the productions of the grammar. 
+Based on loops and a stack to track the parsing decisions.
+The file create_blocks.py optimises the control flow by declaring the visibility of the variables in the blocks.
+The parsing technique LL(1) ("Left-to-right, Leftmost derivation) ensures that the correct productions are selected based on the current and next token.
 
 
-## 5. extension points and customisation options:
+## 4. Examples and test scenarios:
+
+
+## 5. Extension points and customisation options:
     - Possibility to extend lexical and syntactic grammar 
   (5)-> Improvement(lexer): Adapt specifications to language and case-sensitivity requirements. 
 
