@@ -53,7 +53,7 @@ class Parser:
             self.tree.print()
             actual_token = lookahead[0:2]
             loc = lookahead[2]
-            raise Exception(f"EXPECTED: {token}, GOT:{lookahead}. (line {loc[0]},{loc[1]})")
+            raise Exception(f"EXPECTED: {token}, GOT:{actual_token}. (line {loc[0]},{loc[1]})")
         
         production = self.ParsingTable.get_table_entry(token[0], lookahead[0])
         if self.stack[0][0]=="ELEVEL5X":
@@ -62,7 +62,7 @@ class Parser:
             self.tree.print()
             actual_token = lookahead[0:2]
             loc = lookahead[2]
-            raise Exception(f"EXPECTED: {token}, GOT:{lookahead}. (line {loc[0]},{loc[1]})")
+            raise Exception(f"EXPECTED: {token}, GOT:{actual_token}. (line {loc[0]},{loc[1]})")
         
         self.stack.pop(0)
         stack_acc = []
