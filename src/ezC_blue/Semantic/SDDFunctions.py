@@ -18,23 +18,31 @@ symbolTable= SymboltableStack()
 #--------------------
 
 #-------------------------
-# LABELS
-number_of_labels = 0
-all_labels = []
+# LABEL
 
-def Label(name:str = ""):
-    global number_of_labels, all_labels
-    idx = number_of_labels
-    number_of_labels += 1
+class Label():
+    # LABELS
+    number_of_labels = 0
+    all_labels = []
+    def __init__(self, name:str= "") -> None:
+        idx = Label.number_of_labels
+        Label.number_of_labels+=1
+        Label.all_labels.append(self)
+        self.code =  name + str(idx) + ":\n"
+        self.name =  name+ str(idx)
+        self.id   =  idx
+        self.WasUsed = False
+        
+    def get(self):
+        self.WasUsed = True
+        return self.name
 
-    l = {
-            "code": " "+name + str(idx) + ":",
-            "name": " "+name+ str(idx),
-            "id":   idx
-    }
-
-    all_labels.append(l)
-    return l
+    def set(self, force = False):
+        if self.WasUsed or force:
+            return [self.code]
+        else:
+            return []
+        
 
 # LABELS
 #-------------------------------
@@ -69,7 +77,7 @@ def inherit_next_2_children(node):
     node.children[1].next = node.next
 
 def synth_code_2_children(node):
-    node.code = node.children[0].code +"\n"+ node.managed_labels["next"]["code"] + node.children[1].code
+    node.code = node.children[0].code + node.managed_labels["next"].set() + node.children[1].code
 
 def inherit_next_1_child(node):
     node.children[0].next = node.next
@@ -78,7 +86,7 @@ def synth_code_1_child(node):
     node.code = node.children[0].code
 
 def synth_code_epsilon(node):
-    node.code = ""
+    node.code = []
 
 def TYPE_synth_expected_type_and_width(node):
     # get base type from type keyword
@@ -91,7 +99,7 @@ def TYPE_synth_expected_type_and_width(node):
         case TokenType.TYPE_FLOAT:
             node.type= "float"
             node.width= 32
-        case TokenType.TYPE_STR:  # in case of string we do not have any possible array
+        case TokenType.TYPE_STR:
             node.type= "string"
             node.width= None
         case TokenType.TYPE_BOOL:
@@ -100,7 +108,7 @@ def TYPE_synth_expected_type_and_width(node):
         case __:
             raise SyntaxError("EXPECTED TYPE SPECIFIER")
         
-    node.code= node.type
+    node.code= [node.type]
     
 def TYPE_synth_type_from_Symbol_Table(node):
     pass # TODO: Lookup previously declared value from symboltable
@@ -120,15 +128,12 @@ def ASSIGNMENT_synth(node):
         node.type = actual_type
     symbolTable.addSymbolToCurrentContext(node.children[1].lexval, None, expected_type)    #node.symbol_table.add?
 
-    if node.children[0].code == "string":
-        node.children[0].code = "char"
+    if node.children[0].code == ["string"]:
+        node.children[0].code = ["char"]
         node.children[1].lexval+="[]"
     # SYNTH CODE
-    node.code = f"""
-{node.children[3].code} 
-    {node.children[0].code} {node.children[1].lexval} = {node.children[3].res['name']}; """
+    node.code = node.children[3].code + node.children[0].code + [f'{node.children[1].lexval} = {node.children[3].res["name"]};']
 
-    
 def EXPRSTMT_synth(node):
     node.type = node.children[0].type
     node.res = node.children[0].res
@@ -152,13 +157,11 @@ def IFSTMT_synth(node):
     expression = node.children[2]
     statement1 = node.children[5]
     ifstmtx = node.children[7]
-    node.code = f"""
-{expression.code} 
-{node.managed_labels['True']['code']}
-    {statement1.code} 
-{node.managed_labels['False']['code']} 
-    {ifstmtx.code}
-"""
+    node.code = expression.code + node.managed_labels['True'].set() + statement1.code + node.managed_labels['False'].set() + ifstmtx.code
+    
+def IFSTMTX_synth(node):
+    statement = node.children[2]
+    node.code =  statement.code
     
 def synth_code_from_last_child(node):
     node.code = node.children[len(node.children)-1].code
@@ -180,11 +183,7 @@ def WHILESTMT_inherit(node):
 def WHILESTMT_synth(node):
     expression = node.children[2]
     statement = node.children[5]
-    node.code= f"""{node.managed_labels['start']['code']} 
-{expression.code} 
-{node.managed_labels['True']['code']} 
-    {statement.code}
-    goto {node.managed_labels['start']['name']};"""
+    node.code= node.managed_labels['start'].set(force = True) + expression.code + node.managed_labels['True'].set() + statement.code + ["goto"] + [node.managed_labels['start'].get()+";"]
     
 def PRINTSTMT_inherit(node):
     expression= node.children[1]
@@ -207,7 +206,7 @@ def PRINTSTMT_synth(node):
         case _:
             c_type_id= f'C-typeSpecifier({expression.type})'
     
-    node.code= f'{expression.code} {node.managed_labels["EXPR_next"]["code"]} printf("{c_type_id}", {expression.res["name"]});'
+    node.code= expression.code + node.managed_labels["EXPR_next"].set() + [f'printf("{c_type_id}", {expression.res["name"]});']
     
 def RETSTMT_inherit(node):
     expression= node.children[1]
@@ -221,9 +220,8 @@ def RETSTMT_synth(node):
     if expression.type!="int":
         raise Exception("TYPE ERROR: only return int")
 
-    node.code= f'{expression.code} {node.managed_labels["EXPR_next"]["code"]} return {expression.res["name"]};'
+    node.code= expression.code + node.managed_labels["EXPR_next"].set() + [f'return {expression.res["name"]};']
     
-
 def EXPR_inherit(node):
     for child in node.children:
         if node.true_label:
@@ -234,9 +232,7 @@ def EXPR_inherit(node):
 def EXPR_bool_highest_add_gotos(node):
     EXPR_bool_synth(node)
     if node.true_label and node.false_label:
-        node.code+= f"""
-    if ({node.res['name']}) {"{"} goto {node.true_label["name"]};{"}"}
-    if (!({node.res['name']})) {"{"} goto {node.false_label["name"]};{"}"}"""
+        node.code+= [ f'if ({node.res["name"]}) {"{"} goto {node.true_label.get()};{"}"}', f'if (!({node.res["name"]})) {"{"} goto {node.false_label.get()};{"}"}' ]
 
 def EXPR_bool_synth(node):
     elevel1 = node.children[0]
@@ -251,15 +247,14 @@ def EXPR_bool_synth(node):
     else:
         node.type= elevel1.type
     
-    if exprx.code=="" and exprx.res==None:
+    if exprx.code==[] and exprx.res==None:
         node.res= elevel1.res
         node.code=elevel1.code
     else:
         node.res= Temp("bool")
         exprx_code= exprx.code if exprx.code!=None else ""
-        node.code = f' {elevel1.code} {exprx_code} {node.res["code"]} = {elevel1.res["name"]} {operand} {exprx.res["name"]}; '
-
-        
+        node.code = elevel1.code + exprx_code + [f'{node.res["code"]} = {elevel1.res["name"]} {operand} {exprx.res["name"]}; ']
+  
 def EXPR_number_synth(node):
     elevel1 = node.children[0]
     exprx = node.children[1]
@@ -279,10 +274,10 @@ def EXPR_number_synth(node):
         pass
     if exprx.code:
         node.res= Temp(elevel1.type)
-        node.code = f' {elevel1.code} {exprx.code} {node.res["code"]} = {elevel1.res} {operand} {exprx.code};'
+        node.code = elevel1.code + exprx.code + [f'{node.res["code"]} = {elevel1.res["name"]} {operand} {exprx.res["name"]}; ']
     else:
         node.res= elevel1.res
-        node.code= f'{elevel1.code}'
+        node.code= elevel1.code
 
 def EXPRX3_synth(node):
     node.operand= node.children[0].code 
@@ -307,24 +302,23 @@ def EXPR_invert_synth(node):
         print("TYPE ERROR")
     
     node.res = Temp(node.type)
-    node.code =f'{expr.code} \n {node.res} = {operant_token} {expr.res}'
+    node.code =[f'{expr.code} \n {node.res} = {operant_token} {expr.res}']
     
 def EXPR_L6_synth(node):
     node.code= node.children[0].code
     node.res = node.children[0].res
     node.type = node.children[0].type
 
-
 def EXPR_PRIMARY_synth(node):
     only_child= node.children[0]
     node.type = only_child.type
     node.res = only_child.res
-    node.code = only_child.code
+    node.code = [only_child.code]
 
 def EXPR_PRIMARY_getValue_synth(node):
     child= node.children[0]
 
-    node.code= ""
+    node.code= []
     match child.label:
         case "true":
             node.type="bool"
@@ -357,15 +351,15 @@ def VARORCALL_synth(node):
     funcallx= node.children[1]
     if not funcallx.res:
         node.res = {"name":variablename}
-        node.code = ""
+        node.code = []
     else: # THIS MEANS ITS A FUNCTION
         node.res= Temp(node.type)
-        node.code= f"""{funcallx.code}    {node.res["code"]} = {variablename}{funcallx.res}; \n"""
+        node.code= funcallx.code + [f'{node.res["code"]} = {variablename}{funcallx.res}; \n']
         
 def FUNCX_synth(node):
     arguments= node.children[1]
     node.code= arguments.code
-    node.res= f"({arguments.res})"
+    node.res= [f"({arguments.res})"]
     
 def COMPOP_synth(node):
     node.code= node.children[0].label
@@ -373,11 +367,11 @@ def COMPOP_synth(node):
 def ARGS_synth(node):
     expression= node.children[0]
     argsX= node.children[1]
-    node.code= f"""{expression.code}{argsX.code}"""
+    node.code= expression.code + argsX.code
     node.res= f"{expression.res['name']}{argsX.code}"
 
 def ARGSX_synth(node):
     expression= node.children[0]
     argsX= node.children[1]
-    node.code= f"""{expression.code}{argsX.code}"""
+    node.code= expression.code + argsX.code
     node.res= f",{expression.res['name']} {argsX.code}"
