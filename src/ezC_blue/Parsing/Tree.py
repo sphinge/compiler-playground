@@ -10,7 +10,7 @@ class Tree_Wrapper():
         self.nodes = []
         self.size  = 0
 
-    def addNode(self, name: str, parentID: int|None = None, literal: str|None = None):
+    def addNode(self, name: str, parentID: int|None = None, literal: str|None = None, loc: (int,int)|None = None):
         if parentID == None:
             self.size += 1
             self.root = Tree_Node(str(self.size), label = name)
@@ -27,6 +27,8 @@ class Tree_Wrapper():
 
         newNode = Tree_Node(str(self.size), label=name)
         newNode.lexval = literal
+        if loc is not None:
+            newNode.loc = loc
         parent.add_child(newNode)
 
         self.nodes.append(newNode)
@@ -87,6 +89,7 @@ class Tree_Node():
         self.SDD_inherit_func    = None
         self.SDD_synthesize_func = None
         self.lexval     = None
+        self.loc        = (None,None)
 
         # SDD TypChecking
         self.type = None

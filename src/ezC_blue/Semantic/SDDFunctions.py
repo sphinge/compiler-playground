@@ -106,7 +106,7 @@ def TYPE_synth_expected_type_and_width(node):
             node.type= "bool"
             node.width= 16
         case __:
-            raise SyntaxError("EXPECTED TYPE SPECIFIER")
+            raise SyntaxError("EXPECTED TYPE SPECIFIER",lineno=node.loc[0],offset=node.loc[1])
         
     node.code= [node.type]
     
@@ -122,8 +122,7 @@ def ASSIGNMENT_synth(node):
     actual_type = node.children[3].type
 
     if expected_type != actual_type:
-        # TODO make Exception 
-        print(f"TYPING ERROR: type {expected_type} does not match {actual_type}")
+        raise SyntaxError(f"TYPING ERROR: type {expected_type} does not match {actual_type}",lineno=node.loc[0],offset=node.loc[1])
     else:
         node.type = actual_type
     symbolTable.addSymbolToCurrentContext(node.children[1].lexval, None, expected_type)    #node.symbol_table.add?
@@ -218,7 +217,7 @@ def RETSTMT_synth(node):
     expression= node.children[1]
 
     if expression.type!="int":
-        raise Exception("TYPE ERROR: only return int")
+        raise SyntaxError("TYPE ERROR: only return int",lineno=node.loc[0],offset=node.loc[1])
 
     node.code= expression.code + node.managed_labels["EXPR_next"].set() + [f'return {expression.res["name"]};']
     
@@ -242,7 +241,7 @@ def EXPR_bool_synth(node):
     if exprx.type==None:
         node.type= elevel1.type
     elif exprx.type!= elevel1.type:
-        print("TYPE ERROR")
+        raise SyntaxError("TYPE ERROR",lineno=node.loc[0],offset=node.loc[1])
         node.type= None
     else:
         node.type= elevel1.type
@@ -263,7 +262,7 @@ def EXPR_number_synth(node):
     if exprx.type==None:
         node.type= elevel1.type
     elif exprx.type!= elevel1.type:
-        print("TYPE ERROR")
+        raise SyntaxError("TYPE ERROR",lineno=node.loc[0],offset=node.loc[1])
         node.type= None
     else:
         node.type= elevel1.type
@@ -299,7 +298,7 @@ def EXPR_invert_synth(node):
     
     node.type = expr.type
     if node.type=="str":
-        print("TYPE ERROR")
+        raise SyntaxError("TYPE ERROR",lineno=node.loc[0],offset=node.loc[1])
     
     node.res = Temp(node.type)
     node.code =[f'{expr.code} \n {node.res} = {operant_token} {expr.res}']
@@ -344,7 +343,7 @@ def VARORCALL_synth(node):
     variablename= identifier.lexval
     tableEntry= symbolTable.get(variablename)
     if not tableEntry:
-        print("UNDEFINED ERROR")
+        raise SyntaxError("UNDEFINED ERROR",lineno=node.loc[0],offset=node.loc[1])
     else: 
         node.type= tableEntry["type"]
     
