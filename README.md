@@ -22,15 +22,15 @@ ezC has basic functionality, including:\
 **- Blocks:** `{...}`\
 **- Conditional Statements:** `if{...} else{...}` where `else` is optional\
 **- Operators:**
-- mathematical: +, -, *, /, =, <, >, <=, >=, !=
-- logical: !, ==, &&, || \
+**- mathematical: +, -, *, /, =, <, >, <=, >=, !=
+**- logical: !, ==, &&, || \
 
 **- While-Loops:** `while(condition){...}`\
  
 
 ### Project:
 ## 1. basics and principles of lexical analysis (scanning):
-- Description of the language to be lexemised 
+    - Description of the language to be lexemised 
     A simple grammar in BNF notation is defined in the grammarHash.py file. The hash table represents the grammar rules of the language. 
     Example: The production "EXPRESSION" contains definitions of subordinate expressions such as "ELEVEL1" and "EXPRESSIONX"
     A valid ezC programme must follow the rules of the flying LL(1) grammar:
@@ -90,23 +90,22 @@ The file TokenTyps.py contains a TokenType enumeration for the lexer. The code h
 methods for converting between string representations and enum values. 
 Below is a complete list of the token types that our lexical analyser recognises.
 
-- EOF
-- LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, COMMA, DOT
-- MINUS, PLUS, SEMICOLON, SLASH, STAR, VERTICAL_BAR
-- BANG, BANG_EQUAL, EQUAL, EQUAL_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, RIGHT_ARROW
-- IDENTIFIER, STRING, NUMBER
-- AND, ELSE, FALSE, FUNC, IF, NIL, OR, PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE
+> EOF
+> LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, COMMA, DOT
+> MINUS, PLUS, SEMICOLON, SLASH, STAR, VERTICAL_BAR
+> BANG, BANG_EQUAL, EQUAL, EQUAL_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, RIGHT_ARROW
+> IDENTIFIER, STRING, NUMBER
+> AND, ELSE, FALSE, FUNC, IF, NIL, OR, PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE
 
 The lexer.py file analyses and breaks down the source code into a list of tokens. 
 The Lexer class contains attributes, methods and a token recogniser. 
     
-    Example:The "handleString" method processes character strings (text,
-    enclosed in inverted commas) from a source code.
-    If the lexer encounters an opening inverted comma ("), this method is called.
-    It reads characters until it encounters the closing inverted commas (") and adds them to a token.
-    If no closing inverted commas are found or a new line is contained in the string
-    an error message is displayed ("missing closing asterix").
-
+> Example:The "handleString" method processes character strings (text,
+> enclosed in inverted commas) from a source code.
+> If the lexer encounters an opening inverted comma ("), this method is called.
+> It reads characters until it encounters the closing inverted commas (") and adds them to a token.
+> If no closing inverted commas are found or a new line is contained in the string
+> an error message is displayed ("missing closing asterix").
 
 - Implementation of character classification and lexical token definition.
 
@@ -149,28 +148,28 @@ def scanTokens(self):
 ```
 The compiler uses a stack of symbol tables, which may or may not be linked together. This structure allows us to handle the simple block scoping of the ezC language.
 Functionality:
-    - When entering a new area, a new symbol table is placed on the stack. 
-    - The symbol table of the area in which the programme status is located is always at the top of the stack. 
-    - When leaving the current area, the header (the corresponding symbol table) is removed from the stack. 
-    - New entries can only be added at the top of the stack. 
-    - If a new symbol table is moved to the stack, it must have a "parent pointer" to one of the following two objects: 
-    1. the symbol table of the global area. (end of the stack) 
-    2. the symbol table that was at the top of the stack before the new scope. (the outer area) 
-    - The stack is initialised with an empty global symbol table as the root element. Therefore, the chain of parent pointers of all future symbol tables on the stack leads to the global symbol table. 
-    - When searching for an element, the header of the stack and the chain of higher-level objects (outer areas) are checked up to the global symbol table.
+ > - When entering a new area, a new symbol table is placed on the stack. 
+ > - The symbol table of the area in which the programme status is located is always at the top of the stack. 
+ > - When leaving the current area, the header (the corresponding symbol table) is removed from the stack. 
+ > - New entries can only be added at the top of the stack. 
+ > - If a new symbol table is moved to the stack, it must have a "parent pointer" to one of the following two objects: 
+ > 1. the symbol table of the global area. (end of the stack) 
+ > 2. the symbol table that was at the top of the stack before the new scope. (the outer area) 
+ > - The stack is initialised with an empty global symbol table as the root element. Therefore, the chain of parent pointers of all future symbol tables on the stack leads to the global symbol table. 
+ > - When searching for an element, the header of the stack and the chain of higher-level objects (outer areas) are checked up to the global symbol table.
 The following diagram shows this approach more clearly. [](/docs/SymbolTableStack_Diagramm.png)
 
 
 ### Example for the lexer
 As an Example, when the following text is provided:\
->2;\
-"Hello World"\
-32345.123\
-(){};\
-var i <=23;\
-var j =(i +1) * 2; // alksdjhfkj<<<=>//()\
+> >2;\
+> "Hello World"\
+> 32345.123\
+> (){};\
+> var i <=23;\
+> var j =(i +1) * 2; // alksdjhfkj<<<=>//()\
 
-the following list of tokens will be generated by the lexer:
+The following list of tokens will be generated by the lexer:
 ```python
 [
     [TokenType.SEMICOLON.name, None],
@@ -206,7 +205,6 @@ the following list of tokens will be generated by the lexer:
 
 ## 2. basics and principles of syntax analysis (parsing):
 - Description of the structure of the language (context-free grammar)
-
 The grammar LL(1) is represented in the hash table, with keys, non-terminals and values representing their corresponding productions. 
 The parsin-table is generated by the equally named class `ParsingTable`. An object of this class is initialised with a hash table.     
 In the following, the expression grammar from the lecture is shown in "hashtable form". 
@@ -225,27 +223,29 @@ The Parser.py file is used for error handling, e.g. triggering exceptions if an 
 This code has a modular structure and contains the syntactic analysis of inputs in a specific format.
 
 - Implementation of syntax rules and syntax analysis strategies
-
 Functionality for the first and follow sets, and ultimately the parsing-table, are all constructed by the algorithms shown in the lecture.
 The parsing-table is stored in a two-dimensional hashtable and the Parser.py file is used for error handling, e.g. triggering exceptions if an unexpected token or invalid production occurs.
 This code has a modular structure and contains the syntactic analysis of inputs in a specific format.
 
 The intermediate representation is is 3AC-like C.
 
-We use the parse tree to calculate synthesized and inherited attributes of each production.
-For this we have functions that represent Syntax directed definitions. (SDDfunctions.py)
-For more detailed info, see Issue ezc/bluecompiler#15
+
 
 
 
 ## 3. architecture and modularity of lexer and parser:
-    - Separation of lexical and syntactic analysis 
-    - Merging the lexical and syntactic token streams ( Block-Scoping, Lookahead LL(1))
-    - Use of token buffers and lookahead functions to process conflicts and unusual structures 
+
+Die Syntaktische Analyse baut auf der Ausgabe der lexikalischen Analyse auf und interpretiert die Struktur des Quellcodes gemäß der Grammatik der Zielsprache.
+Es wird eine Baumstruktur erzeugt welche die hierarchische Struktur des Quellcodes darstellt. Wir verwenden den Parse-Baum, um die synthetisierten und vererbten Attribute jeder Produktion zu berechnen. Hier sind Funktionen, die Syntax gerichtete Definitionen darstellen. (SDDfunctions.py)
+Für detailliertere Informationen, siehe Issue ezc/bluecompiler#15siehetree.py
+Der Nonrecursive Predictive Parser ist ein Top-Down-Parser, der iterative Methoden verwendet und eine vorausschauende Analyse einsetzt, um die Produktionen der Grammatik zu verarbeiten. 
+Basierend auf Schleifen und einen Stack zur Nachverfolgung der Parsing-Entscheidungen.
+Die Datei create_blocks.py optimiert den Kontrollfluss indem die Sichtbarkeit der Variablen in den Blocken deklariert werden.
+Die Parsing-Technic LL(1) ("Left-to-right, Leftmost derivation) sorgt dafür, dass die richtigen Produktionen basierend auf dem aktuellen und nächsten Token ausgewählt wird.
+
 
 ## 4. examples and test scenarios:
-    - Examples of valid and invalid input strings 
-    - Description of test cases and expected values for the parser 
+
 
 ## 5. extension points and customisation options:
     - Possibility to extend lexical and syntactic grammar 
