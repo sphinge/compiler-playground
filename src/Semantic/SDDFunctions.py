@@ -8,13 +8,13 @@ Include the function name in the appropriate place of the SDDHash
 I think the functions should only take one node as input. This node is defined in Tree.py
 """
 
-
 from Lexing.TokenTypes import TokenType
 from SymboltableStack import SymboltableStack
 
 # --------------------
 # SYMBOL TABLE
-symbolTable: SymboltableStack = SymboltableStack()  # SYMBOL TABLE
+symbolTable = SymboltableStack()
+# SYMBOL TABLE
 # --------------------
 
 # -------------------------
@@ -23,23 +23,23 @@ symbolTable: SymboltableStack = SymboltableStack()  # SYMBOL TABLE
 
 class Label:
     # LABELS
-    number_of_labels: int = 0
-    all_labels: list["Label"] = []
+    number_of_labels = 0
+    all_labels = []
 
     def __init__(self, name: str = "") -> None:
-        idx: int = Label.number_of_labels
+        idx = Label.number_of_labels
         Label.number_of_labels += 1
         Label.all_labels.append(self)
-        self.code: str = name + str(idx) + ":\n"
-        self.name: str = name + str(idx)
-        self.id: int = idx
-        self.WasUsed: bool = False
+        self.code = name + str(idx) + ":\n"
+        self.name = name + str(idx)
+        self.id = idx
+        self.WasUsed = False
 
-    def get(self) -> str:
+    def get(self):
         self.WasUsed = True
         return self.name
 
-    def set(self, force: bool = False) -> list[str]:
+    def set(self, force=False):
         if self.WasUsed or force:
             return [self.code]
         else:
@@ -55,20 +55,16 @@ class Label:
 
 # -------------------------------
 # TEMP VARIABLES
-TempDict = dict[str, str | int]
-temp_count: int = 0
-all_temps: list[TempDict] = []
+temp_count = 0
+all_temps = []
 
 
-def Temp(type: str) -> TempDict:
+def Temp(type):
     global temp_count, all_temps
     idx = temp_count
     temp_count += 1
-    t = {
-        "code": type + " t" + str(idx),
-        "name": "t" + str(idx),
-        "id": idx,
-    }
+
+    t = {"code": type + " t" + str(idx), "name": "t" + str(idx), "id": idx}
     all_temps.append(t)
     return t
 
@@ -128,7 +124,9 @@ def TYPE_synth_expected_type_and_width(node):
             node.type = "bool"
             node.width = 16
         case __:
-            raise SyntaxError("EXPECTED TYPE SPECIFIER")
+            raise Exception(
+                f"EXPECTED TYPE SPECIFIER. (line {node.loc[0]},{node.loc[1]})"
+            )
 
     node.code = [node.type]
 
@@ -147,12 +145,18 @@ def ASSIGNMENT_synth(node):
     actual_type = node.children[3].type
 
     if expected_type != actual_type:
-        # TODO make Exception
-        print(f"TYPING ERROR: type {expected_type} does not match {actual_type}")
+        raise Exception(
+            f"TYPING ERROR: type {expected_type} does not match {actual_type}. (line {node.loc[0]},{node.loc[1]})"
+        )
     else:
         node.type = actual_type
+
+    symbol_info = {
+        "width": node.children[0].width,
+    }
+
     symbolTable.addSymbolToCurrentContext(
-        node.children[1].lexval, None, expected_type
+        node.children[1].lexval, symbol_info, expected_type
     )  # node.symbol_table.add?
 
     if node.children[0].code == ["string"]:
@@ -173,6 +177,7 @@ def EXPRSTMT_synth(node):
 
 
 def IFSTMT_inherit(node):
+    symbolTable.pushNewTableOnCurrentContext()
     T = Label("Cond_True")
     F = Label("Cond_False")
 
@@ -188,20 +193,25 @@ def IFSTMT_inherit(node):
 
 
 def IFSTMT_synth(node):
+    #            0  1 2          3 4     5
+    # "IFSTMT": "if ( EXPRESSION ) BLOCK IFSTMTX",
     expression = node.children[2]
-    statement1 = node.children[5]
-    ifstmtx = node.children[7]
+    block = node.children[4]
+    ifstmtx = node.children[5]
     node.code = (
         expression.code
         + node.managed_labels["True"].set()
-        + statement1.code
+        + block.code
         + node.managed_labels["False"].set()
         + ifstmtx.code
     )
+    symbolTable.popHead()
 
 
 def IFSTMTX_synth(node):
-    statement = node.children[2]
+    #             0    1
+    # "IFSTMTX": "else BLOCK",
+    statement = node.children[1]
     node.code = statement.code
 
 
@@ -209,7 +219,20 @@ def synth_code_from_last_child(node):
     node.code = node.children[len(node.children) - 1].code
 
 
+def BLOCK_inherit(node):
+    symbolTable.pushNewTableOnCurrentContext()
+    node.children[1].next = node.next
+
+
+def BLOCK_synth(node):
+    node.code = node.children[1].code
+    symbolTable.popHead()
+
+
 def WHILESTMT_inherit(node):
+    #               0     1 2          3 4
+    # "WHILESTMT": "while ( EXPRESSION ) BLOCK",
+    symbolTable.pushNewTableOnCurrentContext()
     T = Label("Cond_True")
     F = node.next
     start = Label("While_Start")
@@ -226,15 +249,16 @@ def WHILESTMT_inherit(node):
 
 def WHILESTMT_synth(node):
     expression = node.children[2]
-    statement = node.children[5]
+    block = node.children[4]
     node.code = (
         node.managed_labels["start"].set(force=True)
         + expression.code
         + node.managed_labels["True"].set()
-        + statement.code
+        + block.code
         + ["goto"]
         + [node.managed_labels["start"].get() + ";"]
     )
+    symbolTable.popHead()
 
 
 def PRINTSTMT_inherit(node):
@@ -277,7 +301,9 @@ def RETSTMT_synth(node):
     expression = node.children[1]
 
     if expression.type != "int":
-        raise Exception("TYPE ERROR: only return int")
+        raise Exception(
+            f"TYPE ERROR: only return int. (line {node.loc[0]},{node.loc[1]})"
+        )
 
     node.code = (
         expression.code
@@ -311,7 +337,7 @@ def EXPR_bool_synth(node):
     if exprx.type == None:
         node.type = elevel1.type
     elif exprx.type != elevel1.type:
-        print("TYPE ERROR")
+        raise Exception(f"TYPE ERROR. (line {node.loc[0]},{node.loc[1]})")
         node.type = None
     else:
         node.type = elevel1.type
@@ -339,7 +365,7 @@ def EXPR_number_synth(node):
     if exprx.type == None:
         node.type = elevel1.type
     elif exprx.type != elevel1.type:
-        print("TYPE ERROR")
+        raise Exception(f"TYPE ERROR. (line {node.loc[0]},{node.loc[1]}")
         node.type = None
     else:
         node.type = elevel1.type
@@ -384,7 +410,7 @@ def EXPR_invert_synth(node):
 
     node.type = expr.type
     if node.type == "str":
-        print("TYPE ERROR")
+        raise Exception(f"TYPE ERROR. (line {node.loc[0]},{node.loc[1]}")
 
     node.res = Temp(node.type)
     node.code = [f"{expr.code} \n {node.res} = {operant_token} {expr.res}"]
@@ -434,7 +460,7 @@ def VARORCALL_synth(node):
     variablename = identifier.lexval
     tableEntry = symbolTable.get(variablename)
     if not tableEntry:
-        print("UNDEFINED ERROR")
+        raise Exception(f"UNDEFINED ERROR. (line {node.loc[0]},{node.loc[1]}")
     else:
         node.type = tableEntry["type"]
 

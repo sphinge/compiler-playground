@@ -24,7 +24,6 @@ To be expanded, as i do not understand SDD fully myself :(
 
 Code generation
 """
-
 from Semantic.SDDFunctions import *
 
 SDDHash = {
@@ -64,7 +63,7 @@ SDDHash = {
     "PRINTSTMT": {"print": (PRINTSTMT_inherit, PRINTSTMT_synth)},
     "WHILESTMT": {"while": (WHILESTMT_inherit, WHILESTMT_synth)},
     "RETURNSTMT": {"return": (RETSTMT_inherit, RETSTMT_synth)},
-    "BLOCK": {"{": "$$$$"},
+    "BLOCK": {"{": (BLOCK_inherit, BLOCK_synth)},
     "FUNCTIONDECL": {"function": "$$$$"},
     "PARAMETERS": {"epsilon": "$$$$", "identifier": "$$$$"},
     "PARAMETERSX": {"epsilon": "$$$$", ",": "$$$$"},

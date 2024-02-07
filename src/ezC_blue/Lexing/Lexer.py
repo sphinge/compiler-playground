@@ -29,7 +29,7 @@ keywords = {
 
 SymbolTable = dict[str, Any]
 TokenValue = Optional[Union[str, int, float]]
-Token = tuple[TokenType, TokenValue, tuple[int, int]]
+Token = tuple[TokenType, TokenValue]
 
 
 class Lexer:
@@ -53,7 +53,7 @@ class Lexer:
         for self.currentLine in input_string.splitlines(keepends=True):
             self.scanTokens()
             self.resetScanner()
-        self.tokenList.append((TokenType.EOF, None, (self.lineNumber, 0)))
+        self.tokenList.append((TokenType.EOF, None))
 
     def reachedEnd(self):
         return self.forward == len(self.currentLine)
@@ -64,8 +64,6 @@ class Lexer:
 
     def resetScanner(self):
         self.lexemeBegin = 0
-        # TODO: WHAT IS THIS DOING?
-        # self.advance()
         self.forward = 0
 
     def moveToNextLexeme(self):
@@ -81,27 +79,27 @@ class Lexer:
         else:
             return ""  # no lookahead possible if forward reached last character of currentLine
 
-    def consumeToken(self, type: TokenType, literal: TokenValue = None) -> None:
-        self.tokenList.append((type, literal, (self.lineNumber, self.lexemeBegin)))
+    def consumeToken(self, type, literal=None):
+        self.tokenList.append([type, literal, (self.lineNumber, self.lexemeBegin)])
         self.moveToNextLexeme()
 
-    def isDigit(self, char: str):
+    def isDigit(self, char):
         cond1 = char >= "0"
         cond2 = char <= "9"
         return cond1 and cond2
 
-    def isAlpha(self, char: str):
+    def isAlpha(self, char):
         cond1 = char >= "a" and char <= "z"
         cond2 = char >= "A" and char <= "Z"
         cond3 = char == "_"
         return cond1 or cond2 or cond3
 
-    def isAlphaNumeric(self, char: str):
+    def isAlphaNumeric(self, char):
         cond1 = self.isAlpha(char)
         cond2 = self.isDigit(char)
         return cond1 or cond2
 
-    def isFollowedBy(self, secondCharacter: str):
+    def isFollowedBy(self, secondCharacter):
         if self.lookahead() == secondCharacter:
             self.advance()
             return True

@@ -14,7 +14,10 @@ var j =(i +1) * 2; // alksdjhfkj<<<=>//()
     lexer = Lexer()
     lexer.generateTokens(test_code)
     tokens = lexer.tokenList
-    assert tokens == [
+
+    simplified_tokens = [(tok_type, tok_value) for tok_type, tok_value, _ in tokens]
+
+    assert simplified_tokens == [
         (TokenType.SEMICOLON, None),
         (TokenType.INT, 2),
         (TokenType.SEMICOLON, None),
