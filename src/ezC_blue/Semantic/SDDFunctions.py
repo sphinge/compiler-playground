@@ -13,7 +13,7 @@ from SymboltableStack import SymboltableStack
 
 #--------------------
 # SYMBOL TABLE
-symbolTable= SymboltableStack()
+symbolTable=SymboltableStack()
 # SYMBOL TABLE
 #--------------------
 
@@ -122,7 +122,12 @@ def ASSIGNMENT_synth(node):
         raise Exception(f"TYPING ERROR: type {expected_type} does not match {actual_type}. (line {node.loc[0]},{node.loc[1]})")
     else:
         node.type = actual_type
-    symbolTable.addSymbolToCurrentContext(node.children[1].lexval, None, expected_type)    #node.symbol_table.add?
+
+    symbol_info = {
+            "width": node.children[0].width,
+            }
+
+    symbolTable.addSymbolToCurrentContext(node.children[1].lexval, symbol_info, expected_type)    #node.symbol_table.add?
 
     if node.children[0].code == ["string"]:
         node.children[0].code = ["char"]
@@ -136,6 +141,7 @@ def EXPRSTMT_synth(node):
     node.code = node.children[0].code
 
 def IFSTMT_inherit(node):
+    symbolTable.pushNewTableOnCurrentContext()
     T = Label("Cond_True")
     F = Label("Cond_False")
 
@@ -150,19 +156,35 @@ def IFSTMT_inherit(node):
     node.children[7].next = node.next
 
 def IFSTMT_synth(node):
+    #            0  1 2          3 4     5
+    # "IFSTMT": "if ( EXPRESSION ) BLOCK IFSTMTX",
     expression = node.children[2]
-    statement1 = node.children[5]
-    ifstmtx = node.children[7]
-    node.code = expression.code + node.managed_labels['True'].set() + statement1.code + node.managed_labels['False'].set() + ifstmtx.code
+    block = node.children[4]
+    ifstmtx = node.children[5]
+    node.code = expression.code + node.managed_labels['True'].set() + block.code + node.managed_labels['False'].set() + ifstmtx.code
+    symbolTable.popHead()
     
 def IFSTMTX_synth(node):
-    statement = node.children[2]
+    #             0    1     
+    # "IFSTMTX": "else BLOCK",
+    statement = node.children[1]
     node.code =  statement.code
     
 def synth_code_from_last_child(node):
     node.code = node.children[len(node.children)-1].code
 
+def BLOCK_inherit(node):
+    symbolTable.pushNewTableOnCurrentContext()
+    node.children[1].next = node.next 
+
+def BLOCK_synth(node):
+    node.code = node.children[1].code
+    symbolTable.popHead()
+
 def WHILESTMT_inherit(node):
+    #               0     1 2          3 4
+    # "WHILESTMT": "while ( EXPRESSION ) BLOCK",
+    symbolTable.pushNewTableOnCurrentContext()
     T = Label("Cond_True")
     F= node.next
     start = Label("While_Start")
@@ -178,8 +200,9 @@ def WHILESTMT_inherit(node):
     
 def WHILESTMT_synth(node):
     expression = node.children[2]
-    statement = node.children[5]
-    node.code= node.managed_labels['start'].set(force = True) + expression.code + node.managed_labels['True'].set() + statement.code + ["goto"] + [node.managed_labels['start'].get()+";"]
+    block = node.children[4]
+    node.code= node.managed_labels['start'].set(force = True) + expression.code + node.managed_labels['True'].set() + block.code + ["goto"] + [node.managed_labels['start'].get()+";"]
+    symbolTable.popHead()
     
 def PRINTSTMT_inherit(node):
     expression= node.children[1]

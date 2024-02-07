@@ -78,7 +78,7 @@ SDDHash = {
     "return": (RETSTMT_inherit, RETSTMT_synth)
   },
   "BLOCK": {
-    "{": "$$$$"
+    "{": (BLOCK_inherit, BLOCK_synth)
   },
   "FUNCTIONDECL": {
     "function": "$$$$"
