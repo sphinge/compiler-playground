@@ -1,5 +1,7 @@
 # CUSTOM (added by us)
 .DS_Store
+.vscode/*
+felix_debug/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -163,3 +165,4 @@ cython_debug/
 #.idea/
 
 *.json
+.vscode/c_cpp_properties.json
