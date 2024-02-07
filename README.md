@@ -245,7 +245,7 @@ Peter
 - **Project Management:**
 Alexander
 - **Project Setup and Structuring:**
-Felix
+Martin,Felix
 - **Project Documentation:**
 Nikolas, Friederike
 - **Construction of ezC-Language:**
