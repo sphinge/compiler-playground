@@ -126,7 +126,12 @@ def ASSIGNMENT_synth(node):
         print(f"TYPING ERROR: type {expected_type} does not match {actual_type}")
     else:
         node.type = actual_type
-    symbolTable.addSymbolToCurrentContext(node.children[1].lexval, None, expected_type)    #node.symbol_table.add?
+
+    symbol_info = {
+            "width": node.children[0].width,
+            }
+
+    symbolTable.addSymbolToCurrentContext(node.children[1].lexval, symbol_info, expected_type)    #node.symbol_table.add?
 
     if node.children[0].code == ["string"]:
         node.children[0].code = ["char"]
